@@ -1,3 +1,4 @@
 .venv/ # tell Git to ignore that heavy folder
 .venv/
 .venv/
+__pycache__/
