@@ -3,7 +3,7 @@ import numpy as np
 #Shapely.geometry.point is shapely's geometry object for a single (x,y) location gives access to all shapely methods
 #Obstacles is a list of rectangular obstacles generated randomly in the configuration space 
 def is_collision(point, obstacles):
-    x, y = float(point[0], point[1])
+    x, y = float(point[0]), float(point[1])
     p = Point(x, y)
     return any (obs.contains(p) for obs in obstacles)
 
