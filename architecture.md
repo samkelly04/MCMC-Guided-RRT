@@ -8,31 +8,46 @@ This project implements a Rapidly-exploring Random Tree (RRT) path planning algo
 
 ### Core Components
 
-#### 1. Planning Module (`src/planners/`)
+#### 1. RRT Module (`src/rrt/`)
 - **Tree Structure** (`tree.py`): Implements the fundamental RRT tree data structure
   - Maintains parent-child relationships for tree nodes
   - Stores node positions in 2D configuration space
   - Provides path reconstruction functionality
+- **Collision Detection** (`collision.py`): Geometric collision checking utilities
+  - **Point Collision**: Determines if a point lies within any obstacle
+  - **Segment Collision**: Checks if a line segment intersects with obstacles
+  - **Geometry Handling**: Uses Shapely library for robust geometric operations
+    - Boundary behavior: Points on obstacle boundaries are considered free
+    - Intersection detection: Any contact with obstacles (including edges/corners) is collision
 
-#### 2. Collision Detection (`src/collision.py`)
-- **Point Collision**: Determines if a point lies within any obstacle
-- **Segment Collision**: Checks if a line segment intersects with obstacles
-- **Geometry Handling**: Uses Shapely library for robust geometric operations
-  - Boundary behavior: Points on obstacle boundaries are considered free
-  - Intersection detection: Any contact with obstacles (including edges/corners) is collision
-
-#### 3. Environment Generation (`src/random_env_generator.py`)
-- **Random Obstacle Placement**: Generates rectangular obstacles in configuration space
-- **Non-overlapping Constraint**: Ensures obstacles don't intersect with each other
-- **Configurable Parameters**: Variable number of obstacles (2-5) with random areas (4-10 units)
+#### 2. Environment Generation (`src/env/generator.py`)
+- **Maze-Based Generation**: Generates maze-like environments using grid-based random walk algorithm
+- **Grid-Based Design**: Uses a grid to systematically place walls that form corridors and passages
+  - Grid cells represent potential wall locations, not sampling constraints
+  - Grid is a design tool only - discarded after wall placement
+- **Connectivity Guarantee**: Random walk algorithm ensures at least one path exists from start to goal
+  - Algorithm starts from initial cell and randomly walks to neighbors
+  - Removes walls between connected cells during walk
+  - Ensures all cells in path are reachable from start
+- **Configurable Parameters**:
+  - `space_size`: Total workspace dimensions (width, height) - e.g., (100, 100)
+  - `grid_size`: Number of cells in grid (rows, cols) - e.g., (20, 20)
+  - `wall_thickness`: Width of wall segments - e.g., 1.0
+  - `seed`: Random seed for reproducibility
+- **Continuous State Space**: Grid is only used for generation; RRT samples from continuous space
+  - Walls are converted to Shapely rectangles in continuous coordinates
+  - RRT can sample any point (e.g., (1.5, 7.0)) not just grid points
+  - Collision checking operates in continuous space via Shapely
 
 ### Data Flow
 
 ```
 1. Environment Generation
-   ├── Random obstacle placement in 100x100 space
-   ├── Non-overlapping validation
-   └── Obstacle metadata (position, size, Shapely geometry)
+   ├── Grid initialization (configurable dimensions)
+   ├── Random walk algorithm to create maze structure
+   ├── Wall placement based on grid connectivity
+   ├── Conversion to Shapely rectangles (continuous space)
+   └── Obstacle list ready for RRT planning
 
 2. RRT Planning Loop
    ├── Tree initialization with start point
@@ -59,9 +74,16 @@ This project implements a Rapidly-exploring Random Tree (RRT) path planning algo
 - **Dynamic Growth**: Supports incremental tree expansion
 
 #### Environment Modeling
-- **Rectangular Obstacles**: Simplified geometry for computational efficiency
-- **Disjoint Placement**: Prevents overlapping obstacles for valid configuration space
-- **Random Generation**: Supports multiple environment instances for testing
+- **Maze-Based Structure**: Grid-based random walk creates structured maze-like environments
+- **Wall Representation**: Walls are rectangular Shapely geometries in continuous space
+- **Connectivity Guarantee**: Random walk algorithm ensures solvable mazes (at least one path exists)
+- **Configurable Complexity**: Grid size and space size are configurable for testing
+  - Different grid sizes test algorithm performance across complexity levels
+  - Same dimensions with different seeds test robustness on different layouts
+- **Continuous Sampling**: Grid is generation tool only; RRT operates in continuous space
+  - Grid cells help place walls systematically
+  - Once walls are Shapely rectangles, grid is irrelevant
+  - RRT can sample any continuous point, not limited to grid cells
 
 ### Integration Points
 
@@ -71,9 +93,16 @@ This project implements a Rapidly-exploring Random Tree (RRT) path planning algo
 - **Geometry Validation**: Ensures consistent behavior across different input types
 
 #### Configuration Management
-- **Environment Parameters**: Configurable space dimensions and obstacle properties
+- **Environment Parameters**: 
+  - Configurable space dimensions (`space_size`) and grid complexity (`grid_size`)
+  - Wall thickness and random seed for reproducibility
+  - Enables systematic testing across different maze complexities
 - **Sampling Strategies**: Support for different random sampling approaches
 - **Performance Tuning**: Adjustable parameters for RRT expansion
+- **Testing Strategy**:
+  - Dimension variation: Test different grid sizes to assess complexity scaling
+  - Randomness variation: Test different seeds on same dimensions for robustness
+  - Reproducibility: Fixed seeds enable controlled experiments and comparisons
 
 ### Future Extensions
 
@@ -127,18 +156,24 @@ This project implements a Rapidly-exploring Random Tree (RRT) path planning algo
 
 ### Basic Planning
 ```python
-# Generate environment
-obstacles = rand_env_generator(c_space)
+# Generate maze environment
+obstacles = generate_maze(
+    space_size=(100, 100),
+    grid_size=(20, 20),
+    wall_thickness=1.0,
+    seed=42
+)
 
 # Initialize RRT tree
 tree = Tree(start_point)
 
 # Planning loop
 while not reached_goal:
-    sample = uniform_sample()  # or mcmc_sample()
-    nearest = find_nearest_neighbor(sample, tree)
-    if segment_is_free(nearest, sample, obstacles):
-        tree.add_child(nearest_idx, sample)
+    sample = sampler.sample(bounds)  # Continuous sampling (e.g., (47.3, 23.7))
+    nearest_idx = find_nearest(tree, sample)
+    q_new = steer(q_near, sample, step_size, bounds)
+    if segment_is_free(q_near, q_new, obstacles):  # Continuous collision check
+        tree.add_node(nearest_idx, q_new)
 ```
 
 ### Environment Validation
@@ -151,5 +186,3 @@ if point_is_free(point, obstacles):
 if segment_is_free(point_a, point_b, obstacles):
     # Safe edge for tree expansion
 ```
-
-This architecture provides a solid foundation for implementing robust path planning with enhanced sampling strategies while maintaining computational efficiency and extensibility.

@@ -2,7 +2,7 @@
 
 import numpy as np
 from shapely.geometry import box
-from src.collision import (
+from src.rrt.collision import (
     is_collision,
     point_is_free,
     segment_is_collision,
