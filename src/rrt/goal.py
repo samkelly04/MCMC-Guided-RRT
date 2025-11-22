@@ -6,7 +6,11 @@ are used by the RRT planner to determine when to terminate and how
 to connect to the goal.
 """
 
+from typing import Sequence
+
 import numpy as np
+from shapely.geometry import Polygon
+
 from .collision import segment_is_free
 
 
@@ -33,7 +37,11 @@ def is_goal_reached(point: np.ndarray, goal: np.ndarray, threshold: float) -> bo
 
 
 def can_reach_goal_from(
-point: np.ndarray, goal: np.ndarray, obstacles: list, threshold: float) -> bool:
+    point: np.ndarray,
+    goal: np.ndarray,
+    obstacles: Sequence[Polygon],
+    threshold: float,
+) -> bool:
     """
     Check if the goal can be reached from a point (collision-free segment).
     
@@ -46,9 +54,8 @@ point: np.ndarray, goal: np.ndarray, obstacles: list, threshold: float) -> bool:
     Returns:
         True if goal is within threshold AND the segment is collision-free
     """
-    # TODO: Implement goal reachability check
-    # First check if goal is within threshold using is_goal_reached()
-    # Then check if segment from point to goal is collision-free
-    # Return True only if both conditions are met
-    raise NotImplementedError("can_reach_goal_from() not yet implemented")
+    if not is_goal_reached(point, goal, threshold):
+        return False
+    
+    return segment_is_free(point, goal, obstacles)
 
