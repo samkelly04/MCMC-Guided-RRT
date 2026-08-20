@@ -1,0 +1,39 @@
+================================================================================
+EXPERIMENTAL RESULTS ANALYSIS
+================================================================================
+
+Loading results from: results/full_experiment_v4/trials_20251223_203816.json
+✓ Loaded 180 trial results
+✓ Output directory: results/analysis_v4
+
+--------------------------------------------------------------------------------
+GENERATING COMPARATIVE PLOTS
+--------------------------------------------------------------------------------
+Generating comparative plots...
+  ✓ Success rates
+  ✓ Computation time
+  ✓ Path length
+  ✓ Replanning frequency
+  ✓ Belief convergence
+
+All comparative plots saved to: results/analysis_v4
+
+--------------------------------------------------------------------------------
+GENERATING STATISTICAL REPORT
+--------------------------------------------------------------------------------
+Statistical report saved to: results/analysis_v4/statistical_report.txt
+
+================================================================================
+ANALYSIS COMPLETE!
+================================================================================
+
+Results saved to: results/analysis_v4
+
+Generated files:
+  - success_rates.png
+  - computation_time.png
+  - path_length.png
+  - replans_by_complexity.png
+  - belief_convergence.png
+  - statistical_report.txt
+

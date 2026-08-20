@@ -12,7 +12,7 @@ class GoalDirectedSampler(BaseSampler):
     def __init__(self, goal: np.ndarray):
         self.goal = np.array(goal, dtype=float)
 
-    def sample(self, bounds: np.ndarray) -> np.ndarray:
+    def sample(self, bounds: np.ndarray, state: dict | None = None) -> np.ndarray:
         return self.goal
 
     def reset(self, seed: int) -> None:  # pragma: no cover - deterministic sampler
@@ -71,5 +71,5 @@ def test_rrt_planner_returns_none_when_path_blocked():
         max_iterations=20,
     )
 
-    assert planner.plan() is None
+    assert planner.plan(return_partial=False) is None
 

@@ -27,13 +27,17 @@ class UniformSampler(BaseSampler):
         """
         self.rng = np.random.default_rng(seed)
 
-    def sample(self, bounds: np.ndarray) -> np.ndarray:
+    def sample(self, bounds: np.ndarray, state: dict | None = None) -> np.ndarray:
         """
         Generate a uniformly random sample point.
+        
+        This sampler ignores the state parameter and always samples uniformly,
+        maintaining backward compatibility with the basic RRT algorithm.
         
         Args:
             bounds: Workspace limits with shape (2, D): [[min...], [max...]]
                     For 2D: [[x_min, y_min], [x_max, y_max]]
+            state: Optional state dictionary (ignored by uniform sampler)
         
         Returns:
             Sample point as numpy array with shape (D,)
@@ -43,6 +47,7 @@ class UniformSampler(BaseSampler):
         # bounds[0] = [min_x, min_y]
         # bounds[1] = [max_x, max_y]
         # uniform() generates a random value for each dimension between min and max
+        # Note: state parameter is ignored - uniform sampling doesn't use context
         return self.rng.uniform(bounds[0], bounds[1])
 
     def reset(self, seed: int) -> None:

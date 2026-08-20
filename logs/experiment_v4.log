@@ -1,0 +1,672 @@
+======================================================================
+BATCH COMPARISON: Adaptive MCMC vs Uniform Sampling
+======================================================================
+
+Configuration:
+  Maps per complexity level: 30
+  Trials per map: 1
+  Seed range: 100 - 189
+  Total trials per agent: 90
+  Output directory: results/full_experiment_v4
+
+Agents:
+  - RRTAgent
+  - AdaptiveMCMCAgent
+
+============================================================
+Starting Experiment
+============================================================
+Agents: ['RRTAgent', 'AdaptiveMCMCAgent']
+Complexity levels: ['easy', 'medium', 'hard']
+Seed offset: 100
+
+============================================================
+Experiment Setup
+============================================================
+Total trials to run: 90
+Total unique maps: 90
+Output directory: results/full_experiment_v4
+============================================================
+
+
+--- EASY Complexity ---
+Grid size: (6, 6)
+Maps: 30, Trials per map: 1
+Generating 30 mazes for easy complexity (seeds 100-129)
+
+  Agent: RRTAgent
+    Progress: 10/180 (5.6%)    Progress: 20/180 (11.1%)    Progress: 30/180 (16.7%)
+    RRTAgent: 30/30 success (100.0%), avg time: 1.586s
+
+  Agent: AdaptiveMCMCAgent
+    Progress: 40/180 (22.2%)    Progress: 50/180 (27.8%)ℹ️  Event-triggered replan (step 3): partial path, reached 20.15 from target
+    Progress: 60/180 (33.3%)
+    AdaptiveMCMCAgent: 30/30 success (100.0%), avg time: 16.767s
+
+--- MEDIUM Complexity ---
+Grid size: (8, 8)
+Maps: 30, Trials per map: 1
+Generating 30 mazes for medium complexity (seeds 130-159)
+
+  Agent: RRTAgent
+    Progress: 70/180 (38.9%)    Progress: 80/180 (44.4%)    Progress: 90/180 (50.0%)
+    RRTAgent: 17/30 success (56.7%), avg time: 20.764s
+
+  Agent: AdaptiveMCMCAgent
+ℹ️  Best-effort partial path at step 0: reached 11.88 from target
+ℹ️  Event-triggered replan (step 3): partial path, reached 8.89 from target
+ℹ️  Event-triggered replan (step 6): partial path, reached 10.08 from target
+ℹ️  Event-triggered replan (step 11): partial path, reached 11.89 from target
+ℹ️  Event-triggered replan (step 21): partial path, reached 11.54 from target
+ℹ️  Best-effort partial path at step 21: reached 11.50 from target
+ℹ️  Best-effort partial path at step 27: reached 14.23 from target
+ℹ️  Best-effort partial path at step 27: reached 14.23 from target
+ℹ️  Best-effort partial path at step 27: reached 14.23 from target
+ℹ️  Best-effort partial path at step 27: reached 14.23 from target
+ℹ️  Best-effort partial path at step 27: reached 14.23 from target
+ℹ️  Best-effort partial path at step 27: reached 14.23 from target
+ℹ️  Best-effort partial path at step 27: reached 14.23 from target
+ℹ️  Best-effort partial path at step 27: reached 14.23 from target
+ℹ️  Best-effort partial path at step 27: reached 14.23 from target
+ℹ️  Best-effort partial path at step 27: reached 14.23 from target
+⚠️  Navigation stalled after 10 iterations with no progress. Giving up.
+ℹ️  Best-effort partial path at step 0: reached 104.98 from target
+ℹ️  Best-effort partial path at step 0: reached 106.10 from target
+ℹ️  Best-effort partial path at step 0: reached 105.74 from target
+ℹ️  Best-effort partial path at step 0: reached 104.11 from target
+ℹ️  Best-effort partial path at step 0: reached 104.34 from target
+ℹ️  Best-effort partial path at step 0: reached 104.45 from target
+ℹ️  Best-effort partial path at step 0: reached 104.66 from target
+ℹ️  Best-effort partial path at step 0: reached 104.68 from target
+ℹ️  Best-effort partial path at step 0: reached 104.37 from target
+ℹ️  Best-effort partial path at step 0: reached 106.27 from target
+⚠️  Navigation stalled after 10 iterations with no progress. Giving up.
+ℹ️  Best-effort partial path at step 0: reached 108.81 from target
+ℹ️  Best-effort partial path at step 0: reached 108.81 from target
+ℹ️  Best-effort partial path at step 0: reached 108.81 from target
+ℹ️  Best-effort partial path at step 0: reached 108.81 from target
+ℹ️  Best-effort partial path at step 0: reached 108.81 from target
+ℹ️  Best-effort partial path at step 0: reached 108.81 from target
+ℹ️  Best-effort partial path at step 0: reached 108.81 from target
+ℹ️  Best-effort partial path at step 0: reached 108.81 from target
+ℹ️  Best-effort partial path at step 0: reached 108.81 from target
+ℹ️  Best-effort partial path at step 0: reached 108.81 from target
+⚠️  Navigation stalled after 10 iterations with no progress. Giving up.
+ℹ️  Best-effort partial path at step 0: reached 98.75 from target
+ℹ️  Best-effort partial path at step 0: reached 98.75 from target
+ℹ️  Best-effort partial path at step 0: reached 98.75 from target
+ℹ️  Best-effort partial path at step 0: reached 98.75 from target
+ℹ️  Best-effort partial path at step 0: reached 98.75 from target
+ℹ️  Best-effort partial path at step 0: reached 98.75 from target
+ℹ️  Best-effort partial path at step 0: reached 98.75 from target
+ℹ️  Best-effort partial path at step 0: reached 98.75 from target
+ℹ️  Best-effort partial path at step 0: reached 98.75 from target
+ℹ️  Best-effort partial path at step 0: reached 98.75 from target
+⚠️  Navigation stalled after 10 iterations with no progress. Giving up.
+ℹ️  Best-effort partial path at step 0: reached 106.99 from target
+ℹ️  Best-effort partial path at step 0: reached 106.99 from target
+ℹ️  Best-effort partial path at step 0: reached 106.99 from target
+ℹ️  Best-effort partial path at step 0: reached 106.99 from target
+ℹ️  Best-effort partial path at step 0: reached 106.99 from target
+ℹ️  Best-effort partial path at step 0: reached 106.99 from target
+ℹ️  Best-effort partial path at step 0: reached 106.99 from target
+ℹ️  Best-effort partial path at step 0: reached 106.99 from target
+ℹ️  Best-effort partial path at step 0: reached 106.99 from target
+ℹ️  Best-effort partial path at step 0: reached 106.99 from target
+⚠️  Navigation stalled after 10 iterations with no progress. Giving up.
+    Progress: 100/180 (55.6%)ℹ️  Best-effort partial path at step 0: reached 98.76 from target
+ℹ️  Best-effort partial path at step 0: reached 98.76 from target
+ℹ️  Best-effort partial path at step 0: reached 98.76 from target
+ℹ️  Best-effort partial path at step 0: reached 98.76 from target
+ℹ️  Best-effort partial path at step 0: reached 98.76 from target
+ℹ️  Best-effort partial path at step 0: reached 98.76 from target
+ℹ️  Best-effort partial path at step 0: reached 98.76 from target
+ℹ️  Best-effort partial path at step 0: reached 98.76 from target
+ℹ️  Best-effort partial path at step 0: reached 98.76 from target
+ℹ️  Best-effort partial path at step 0: reached 98.76 from target
+⚠️  Navigation stalled after 10 iterations with no progress. Giving up.
+ℹ️  Best-effort partial path at step 0: reached 107.55 from target
+ℹ️  Best-effort partial path at step 0: reached 107.55 from target
+ℹ️  Best-effort partial path at step 0: reached 107.55 from target
+ℹ️  Best-effort partial path at step 0: reached 107.55 from target
+ℹ️  Best-effort partial path at step 0: reached 107.55 from target
+ℹ️  Best-effort partial path at step 0: reached 107.55 from target
+ℹ️  Best-effort partial path at step 0: reached 107.55 from target
+ℹ️  Best-effort partial path at step 0: reached 107.55 from target
+ℹ️  Best-effort partial path at step 0: reached 107.55 from target
+ℹ️  Best-effort partial path at step 0: reached 107.55 from target
+⚠️  Navigation stalled after 10 iterations with no progress. Giving up.
+ℹ️  Best-effort partial path at step 0: reached 103.06 from target
+ℹ️  Best-effort partial path at step 0: reached 103.06 from target
+ℹ️  Best-effort partial path at step 0: reached 103.06 from target
+ℹ️  Best-effort partial path at step 0: reached 103.06 from target
+ℹ️  Best-effort partial path at step 0: reached 103.06 from target
+ℹ️  Best-effort partial path at step 0: reached 103.06 from target
+ℹ️  Best-effort partial path at step 0: reached 103.06 from target
+ℹ️  Best-effort partial path at step 0: reached 103.06 from target
+ℹ️  Best-effort partial path at step 0: reached 103.06 from target
+ℹ️  Best-effort partial path at step 0: reached 103.06 from target
+⚠️  Navigation stalled after 10 iterations with no progress. Giving up.
+ℹ️  Best-effort partial path at step 0: reached 106.47 from target
+ℹ️  Best-effort partial path at step 0: reached 106.47 from target
+ℹ️  Best-effort partial path at step 0: reached 106.47 from target
+ℹ️  Best-effort partial path at step 0: reached 106.47 from target
+ℹ️  Best-effort partial path at step 0: reached 106.47 from target
+ℹ️  Best-effort partial path at step 0: reached 106.47 from target
+ℹ️  Best-effort partial path at step 0: reached 106.47 from target
+ℹ️  Best-effort partial path at step 0: reached 106.47 from target
+ℹ️  Best-effort partial path at step 0: reached 106.47 from target
+ℹ️  Best-effort partial path at step 0: reached 106.47 from target
+⚠️  Navigation stalled after 10 iterations with no progress. Giving up.
+ℹ️  Best-effort partial path at step 0: reached 100.61 from target
+ℹ️  Best-effort partial path at step 0: reached 100.61 from target
+ℹ️  Best-effort partial path at step 0: reached 100.61 from target
+ℹ️  Best-effort partial path at step 0: reached 100.61 from target
+ℹ️  Best-effort partial path at step 0: reached 100.61 from target
+ℹ️  Best-effort partial path at step 0: reached 100.61 from target
+ℹ️  Best-effort partial path at step 0: reached 100.61 from target
+ℹ️  Best-effort partial path at step 0: reached 100.61 from target
+ℹ️  Best-effort partial path at step 0: reached 100.61 from target
+ℹ️  Best-effort partial path at step 0: reached 100.61 from target
+⚠️  Navigation stalled after 10 iterations with no progress. Giving up.
+ℹ️  Best-effort partial path at step 0: reached 109.75 from target
+ℹ️  Best-effort partial path at step 0: reached 109.75 from target
+ℹ️  Best-effort partial path at step 0: reached 109.75 from target
+ℹ️  Best-effort partial path at step 0: reached 109.75 from target
+ℹ️  Best-effort partial path at step 0: reached 109.75 from target
+ℹ️  Best-effort partial path at step 0: reached 109.75 from target
+ℹ️  Best-effort partial path at step 0: reached 109.75 from target
+ℹ️  Best-effort partial path at step 0: reached 109.75 from target
+ℹ️  Best-effort partial path at step 0: reached 109.75 from target
+ℹ️  Best-effort partial path at step 0: reached 109.75 from target
+⚠️  Navigation stalled after 10 iterations with no progress. Giving up.
+    Progress: 110/180 (61.1%)ℹ️  Best-effort partial path at step 0: reached 14.76 from target
+ℹ️  Event-triggered replan (step 6): partial path, reached 10.16 from target
+ℹ️  Event-triggered replan (step 10): partial path, reached 10.54 from target
+ℹ️  Event-triggered replan (step 13): partial path, reached 12.46 from target
+ℹ️  Best-effort partial path at step 13: reached 12.43 from target
+ℹ️  Best-effort partial path at step 23: reached 13.21 from target
+ℹ️  Best-effort partial path at step 30: reached 13.20 from target
+ℹ️  Best-effort partial path at step 30: reached 13.20 from target
+ℹ️  Best-effort partial path at step 30: reached 13.20 from target
+ℹ️  Best-effort partial path at step 30: reached 13.17 from target
+ℹ️  Best-effort partial path at step 32: reached 13.15 from target
+ℹ️  Best-effort partial path at step 32: reached 13.15 from target
+ℹ️  Best-effort partial path at step 32: reached 13.15 from target
+ℹ️  Best-effort partial path at step 32: reached 13.15 from target
+ℹ️  Best-effort partial path at step 32: reached 13.15 from target
+ℹ️  Best-effort partial path at step 32: reached 13.15 from target
+ℹ️  Best-effort partial path at step 32: reached 13.15 from target
+ℹ️  Best-effort partial path at step 32: reached 13.15 from target
+ℹ️  Best-effort partial path at step 32: reached 13.15 from target
+ℹ️  Best-effort partial path at step 32: reached 13.15 from target
+⚠️  Navigation stalled after 10 iterations with no progress. Giving up.
+ℹ️  Best-effort partial path at step 0: reached 106.06 from target
+ℹ️  Best-effort partial path at step 0: reached 106.06 from target
+ℹ️  Best-effort partial path at step 0: reached 106.06 from target
+ℹ️  Best-effort partial path at step 0: reached 106.06 from target
+ℹ️  Best-effort partial path at step 0: reached 106.06 from target
+ℹ️  Best-effort partial path at step 0: reached 106.06 from target
+ℹ️  Best-effort partial path at step 0: reached 106.06 from target
+ℹ️  Best-effort partial path at step 0: reached 106.06 from target
+ℹ️  Best-effort partial path at step 0: reached 106.06 from target
+ℹ️  Best-effort partial path at step 0: reached 106.06 from target
+⚠️  Navigation stalled after 10 iterations with no progress. Giving up.
+ℹ️  Best-effort partial path at step 0: reached 99.09 from target
+ℹ️  Best-effort partial path at step 0: reached 99.09 from target
+ℹ️  Best-effort partial path at step 0: reached 99.09 from target
+ℹ️  Best-effort partial path at step 0: reached 99.09 from target
+ℹ️  Best-effort partial path at step 0: reached 99.09 from target
+ℹ️  Best-effort partial path at step 0: reached 99.09 from target
+ℹ️  Best-effort partial path at step 0: reached 99.09 from target
+ℹ️  Best-effort partial path at step 0: reached 99.09 from target
+ℹ️  Best-effort partial path at step 0: reached 99.09 from target
+ℹ️  Best-effort partial path at step 0: reached 99.09 from target
+⚠️  Navigation stalled after 10 iterations with no progress. Giving up.
+ℹ️  Best-effort partial path at step 0: reached 16.98 from target
+ℹ️  Event-triggered replan (step 3): partial path, reached 47.51 from target
+ℹ️  Event-triggered replan (step 6): partial path, reached 12.47 from target
+ℹ️  Event-triggered replan (step 18): partial path, reached 13.58 from target
+ℹ️  Best-effort partial path at step 0: reached 45.82 from target
+ℹ️  Event-triggered replan (step 3): partial path, reached 16.03 from target
+ℹ️  Best-effort partial path at step 0: reached 102.57 from target
+ℹ️  Best-effort partial path at step 0: reached 102.57 from target
+ℹ️  Best-effort partial path at step 0: reached 102.57 from target
+ℹ️  Best-effort partial path at step 0: reached 102.57 from target
+ℹ️  Best-effort partial path at step 0: reached 102.57 from target
+ℹ️  Best-effort partial path at step 0: reached 102.57 from target
+ℹ️  Best-effort partial path at step 0: reached 102.57 from target
+ℹ️  Best-effort partial path at step 0: reached 102.57 from target
+ℹ️  Best-effort partial path at step 0: reached 102.57 from target
+ℹ️  Best-effort partial path at step 0: reached 102.57 from target
+⚠️  Navigation stalled after 10 iterations with no progress. Giving up.
+    Progress: 120/180 (66.7%)
+    AdaptiveMCMCAgent: 15/30 success (50.0%), avg time: 140.491s
+
+--- HARD Complexity ---
+Grid size: (10, 10)
+Maps: 30, Trials per map: 1
+Generating 30 mazes for hard complexity (seeds 160-189)
+
+  Agent: RRTAgent
+    Progress: 130/180 (72.2%)    Progress: 140/180 (77.8%)    Progress: 150/180 (83.3%)
+    RRTAgent: 28/30 success (93.3%), avg time: 19.657s
+
+  Agent: AdaptiveMCMCAgent
+ℹ️  Best-effort partial path at step 0: reached 50.00 from target
+ℹ️  Event-triggered replan (step 3): partial path, reached 46.21 from target
+ℹ️  Event-triggered replan (step 6): partial path, reached 45.05 from target
+ℹ️  Event-triggered replan (step 11): partial path, reached 47.78 from target
+ℹ️  Best-effort partial path at step 11: reached 47.78 from target
+ℹ️  Best-effort partial path at step 11: reached 47.45 from target
+ℹ️  Best-effort partial path at step 14: reached 47.47 from target
+ℹ️  Best-effort partial path at step 14: reached 47.47 from target
+ℹ️  Best-effort partial path at step 14: reached 47.33 from target
+ℹ️  Best-effort partial path at step 15: reached 47.08 from target
+ℹ️  Best-effort partial path at step 15: reached 47.04 from target
+ℹ️  Best-effort partial path at step 16: reached 47.27 from target
+ℹ️  Best-effort partial path at step 16: reached 47.11 from target
+ℹ️  Best-effort partial path at step 17: reached 47.21 from target
+ℹ️  Best-effort partial path at step 17: reached 47.21 from target
+ℹ️  Best-effort partial path at step 17: reached 47.21 from target
+ℹ️  Best-effort partial path at step 17: reached 47.21 from target
+ℹ️  Best-effort partial path at step 17: reached 47.21 from target
+ℹ️  Best-effort partial path at step 17: reached 47.21 from target
+ℹ️  Best-effort partial path at step 17: reached 47.21 from target
+ℹ️  Best-effort partial path at step 17: reached 47.21 from target
+ℹ️  Best-effort partial path at step 17: reached 47.21 from target
+ℹ️  Best-effort partial path at step 17: reached 47.21 from target
+⚠️  Navigation stalled after 10 iterations with no progress. Giving up.
+ℹ️  Best-effort partial path at step 0: reached 15.68 from target
+ℹ️  Event-triggered replan (step 3): partial path, reached 13.40 from target
+ℹ️  Event-triggered replan (step 6): partial path, reached 14.01 from target
+ℹ️  Event-triggered replan (step 11): partial path, reached 11.79 from target
+ℹ️  Event-triggered replan (step 14): partial path, reached 10.48 from target
+ℹ️  Best-effort partial path at step 14: reached 10.64 from target
+ℹ️  Best-effort partial path at step 14: reached 10.64 from target
+ℹ️  Best-effort partial path at step 14: reached 10.64 from target
+ℹ️  Best-effort partial path at step 14: reached 10.64 from target
+ℹ️  Best-effort partial path at step 14: reached 10.64 from target
+ℹ️  Best-effort partial path at step 14: reached 10.64 from target
+ℹ️  Best-effort partial path at step 14: reached 10.48 from target
+ℹ️  Best-effort partial path at step 15: reached 10.18 from target
+ℹ️  Best-effort partial path at step 15: reached 10.18 from target
+ℹ️  Best-effort partial path at step 15: reached 10.18 from target
+ℹ️  Best-effort partial path at step 15: reached 10.18 from target
+ℹ️  Best-effort partial path at step 15: reached 10.18 from target
+ℹ️  Best-effort partial path at step 15: reached 10.18 from target
+ℹ️  Best-effort partial path at step 15: reached 10.18 from target
+ℹ️  Best-effort partial path at step 15: reached 10.18 from target
+ℹ️  Best-effort partial path at step 15: reached 10.18 from target
+ℹ️  Best-effort partial path at step 15: reached 10.18 from target
+⚠️  Navigation stalled after 10 iterations with no progress. Giving up.
+ℹ️  Best-effort partial path at step 0: reached 52.56 from target
+ℹ️  Event-triggered replan (step 3): partial path, reached 50.87 from target
+ℹ️  Event-triggered replan (step 6): partial path, reached 52.91 from target
+ℹ️  Event-triggered replan (step 11): partial path, reached 52.94 from target
+ℹ️  Best-effort partial path at step 11: reached 51.76 from target
+ℹ️  Best-effort partial path at step 15: reached 50.02 from target
+ℹ️  Best-effort partial path at step 15: reached 50.02 from target
+ℹ️  Best-effort partial path at step 15: reached 50.02 from target
+ℹ️  Best-effort partial path at step 15: reached 47.96 from target
+ℹ️  Best-effort partial path at step 0: reached 34.60 from target
+ℹ️  Best-effort partial path at step 0: reached 9.78 from target
+ℹ️  Best-effort partial path at step 0: reached 11.50 from target
+ℹ️  Event-triggered replan (step 3): partial path, reached 18.19 from target
+ℹ️  Event-triggered replan (step 6): partial path, reached 19.10 from target
+    Progress: 160/180 (88.9%)ℹ️  Best-effort partial path at step 0: reached 15.25 from target
+ℹ️  Event-triggered replan (step 3): partial path, reached 14.83 from target
+ℹ️  Event-triggered replan (step 6): partial path, reached 15.59 from target
+ℹ️  Event-triggered replan (step 11): partial path, reached 17.41 from target
+ℹ️  Best-effort partial path at step 11: reached 17.52 from target
+ℹ️  Event-triggered replan (step 18): partial path, reached 18.54 from target
+ℹ️  Best-effort partial path at step 18: reached 18.60 from target
+ℹ️  Best-effort partial path at step 24: reached 19.28 from target
+ℹ️  Best-effort partial path at step 25: reached 19.45 from target
+ℹ️  Best-effort partial path at step 26: reached 19.40 from target
+ℹ️  Best-effort partial path at step 26: reached 19.19 from target
+ℹ️  Best-effort partial path at step 27: reached 19.40 from target
+ℹ️  Best-effort partial path at step 27: reached 19.40 from target
+ℹ️  Best-effort partial path at step 27: reached 19.40 from target
+ℹ️  Best-effort partial path at step 27: reached 19.40 from target
+ℹ️  Best-effort partial path at step 27: reached 19.40 from target
+ℹ️  Best-effort partial path at step 27: reached 19.40 from target
+ℹ️  Best-effort partial path at step 27: reached 19.32 from target
+ℹ️  Best-effort partial path at step 28: reached 19.42 from target
+ℹ️  Best-effort partial path at step 28: reached 19.42 from target
+ℹ️  Best-effort partial path at step 28: reached 19.42 from target
+ℹ️  Best-effort partial path at step 28: reached 19.42 from target
+ℹ️  Best-effort partial path at step 28: reached 19.42 from target
+ℹ️  Best-effort partial path at step 28: reached 19.42 from target
+ℹ️  Best-effort partial path at step 28: reached 19.42 from target
+ℹ️  Best-effort partial path at step 28: reached 19.42 from target
+ℹ️  Best-effort partial path at step 28: reached 19.42 from target
+ℹ️  Best-effort partial path at step 28: reached 19.42 from target
+⚠️  Navigation stalled after 10 iterations with no progress. Giving up.
+ℹ️  Best-effort partial path at step 0: reached 10.92 from target
+ℹ️  Event-triggered replan (step 3): partial path, reached 10.87 from target
+ℹ️  Event-triggered replan (step 6): partial path, reached 11.11 from target
+ℹ️  Event-triggered replan (step 11): partial path, reached 12.33 from target
+ℹ️  Event-triggered replan (step 14): partial path, reached 10.49 from target
+ℹ️  Best-effort partial path at step 14: reached 11.56 from target
+ℹ️  Best-effort partial path at step 19: reached 10.37 from target
+ℹ️  Best-effort partial path at step 20: reached 10.30 from target
+ℹ️  Best-effort partial path at step 20: reached 10.30 from target
+ℹ️  Best-effort partial path at step 20: reached 10.25 from target
+ℹ️  Best-effort partial path at step 22: reached 9.89 from target
+ℹ️  Best-effort partial path at step 22: reached 9.89 from target
+ℹ️  Best-effort partial path at step 22: reached 9.89 from target
+ℹ️  Best-effort partial path at step 22: reached 9.89 from target
+ℹ️  Best-effort partial path at step 22: reached 9.89 from target
+ℹ️  Best-effort partial path at step 22: reached 9.89 from target
+ℹ️  Best-effort partial path at step 22: reached 9.89 from target
+ℹ️  Best-effort partial path at step 22: reached 9.89 from target
+ℹ️  Best-effort partial path at step 22: reached 9.89 from target
+ℹ️  Best-effort partial path at step 22: reached 9.86 from target
+ℹ️  Best-effort partial path at step 23: reached 10.05 from target
+ℹ️  Best-effort partial path at step 23: reached 10.05 from target
+ℹ️  Best-effort partial path at step 23: reached 10.05 from target
+ℹ️  Best-effort partial path at step 23: reached 10.05 from target
+ℹ️  Best-effort partial path at step 23: reached 10.05 from target
+ℹ️  Best-effort partial path at step 23: reached 10.05 from target
+ℹ️  Best-effort partial path at step 23: reached 10.05 from target
+ℹ️  Best-effort partial path at step 23: reached 10.04 from target
+ℹ️  Best-effort partial path at step 24: reached 10.02 from target
+ℹ️  Best-effort partial path at step 24: reached 10.02 from target
+ℹ️  Best-effort partial path at step 24: reached 10.02 from target
+ℹ️  Best-effort partial path at step 24: reached 10.02 from target
+ℹ️  Best-effort partial path at step 24: reached 10.02 from target
+ℹ️  Best-effort partial path at step 24: reached 10.02 from target
+ℹ️  Best-effort partial path at step 24: reached 10.02 from target
+ℹ️  Best-effort partial path at step 24: reached 10.02 from target
+ℹ️  Best-effort partial path at step 24: reached 10.02 from target
+ℹ️  Best-effort partial path at step 24: reached 10.02 from target
+⚠️  Navigation stalled after 10 iterations with no progress. Giving up.
+ℹ️  Best-effort partial path at step 0: reached 36.33 from target
+ℹ️  Event-triggered replan (step 3): partial path, reached 37.21 from target
+ℹ️  Event-triggered replan (step 6): partial path, reached 41.97 from target
+ℹ️  Event-triggered replan (step 11): partial path, reached 42.69 from target
+ℹ️  Best-effort partial path at step 11: reached 41.70 from target
+ℹ️  Best-effort partial path at step 17: reached 40.44 from target
+ℹ️  Best-effort partial path at step 17: reached 40.44 from target
+ℹ️  Best-effort partial path at step 17: reached 40.44 from target
+ℹ️  Best-effort partial path at step 17: reached 40.44 from target
+ℹ️  Best-effort partial path at step 17: reached 40.44 from target
+ℹ️  Best-effort partial path at step 17: reached 40.44 from target
+ℹ️  Best-effort partial path at step 17: reached 40.44 from target
+ℹ️  Best-effort partial path at step 17: reached 40.44 from target
+ℹ️  Best-effort partial path at step 17: reached 40.19 from target
+ℹ️  Best-effort partial path at step 18: reached 40.12 from target
+ℹ️  Best-effort partial path at step 18: reached 40.12 from target
+ℹ️  Best-effort partial path at step 18: reached 40.12 from target
+ℹ️  Best-effort partial path at step 18: reached 40.12 from target
+ℹ️  Best-effort partial path at step 18: reached 40.12 from target
+ℹ️  Best-effort partial path at step 18: reached 40.12 from target
+ℹ️  Best-effort partial path at step 18: reached 40.12 from target
+ℹ️  Best-effort partial path at step 18: reached 40.12 from target
+ℹ️  Best-effort partial path at step 18: reached 40.12 from target
+ℹ️  Best-effort partial path at step 18: reached 40.12 from target
+⚠️  Navigation stalled after 10 iterations with no progress. Giving up.
+ℹ️  Best-effort partial path at step 0: reached 24.11 from target
+ℹ️  Event-triggered replan (step 3): partial path, reached 27.92 from target
+ℹ️  Event-triggered replan (step 6): partial path, reached 30.28 from target
+ℹ️  Best-effort partial path at step 6: reached 30.27 from target
+ℹ️  Event-triggered replan (step 9): partial path, reached 30.43 from target
+ℹ️  Best-effort partial path at step 9: reached 30.12 from target
+ℹ️  Best-effort partial path at step 10: reached 30.45 from target
+ℹ️  Best-effort partial path at step 10: reached 30.45 from target
+ℹ️  Best-effort partial path at step 10: reached 30.38 from target
+ℹ️  Best-effort partial path at step 11: reached 29.69 from target
+ℹ️  Best-effort partial path at step 13: reached 29.59 from target
+ℹ️  Best-effort partial path at step 13: reached 29.59 from target
+ℹ️  Best-effort partial path at step 13: reached 29.59 from target
+ℹ️  Best-effort partial path at step 13: reached 29.59 from target
+ℹ️  Best-effort partial path at step 13: reached 29.59 from target
+ℹ️  Best-effort partial path at step 13: reached 29.59 from target
+ℹ️  Best-effort partial path at step 13: reached 29.59 from target
+ℹ️  Best-effort partial path at step 13: reached 29.59 from target
+ℹ️  Best-effort partial path at step 13: reached 29.59 from target
+ℹ️  Best-effort partial path at step 13: reached 29.59 from target
+⚠️  Navigation stalled after 10 iterations with no progress. Giving up.
+ℹ️  Best-effort partial path at step 0: reached 29.84 from target
+ℹ️  Event-triggered replan (step 3): partial path, reached 31.07 from target
+ℹ️  Best-effort partial path at step 0: reached 60.22 from target
+ℹ️  Best-effort partial path at step 0: reached 36.13 from target
+ℹ️  Event-triggered replan (step 3): partial path, reached 38.32 from target
+ℹ️  Event-triggered replan (step 11): partial path, reached 38.10 from target
+ℹ️  Best-effort partial path at step 21: reached 37.54 from target
+ℹ️  Best-effort partial path at step 0: reached 15.60 from target
+ℹ️  Event-triggered replan (step 3): partial path, reached 15.43 from target
+ℹ️  Event-triggered replan (step 6): partial path, reached 15.60 from target
+ℹ️  Event-triggered replan (step 9): partial path, reached 13.90 from target
+ℹ️  Best-effort partial path at step 9: reached 13.64 from target
+ℹ️  Event-triggered replan (step 12): partial path, reached 13.68 from target
+ℹ️  Best-effort partial path at step 12: reached 13.81 from target
+ℹ️  Best-effort partial path at step 14: reached 14.81 from target
+ℹ️  Best-effort partial path at step 16: reached 13.38 from target
+ℹ️  Best-effort partial path at step 16: reached 13.38 from target
+ℹ️  Best-effort partial path at step 16: reached 13.38 from target
+ℹ️  Best-effort partial path at step 16: reached 13.38 from target
+ℹ️  Best-effort partial path at step 16: reached 13.38 from target
+ℹ️  Best-effort partial path at step 16: reached 13.38 from target
+ℹ️  Best-effort partial path at step 16: reached 13.38 from target
+ℹ️  Best-effort partial path at step 16: reached 13.38 from target
+ℹ️  Best-effort partial path at step 16: reached 13.38 from target
+ℹ️  Best-effort partial path at step 16: reached 13.38 from target
+⚠️  Navigation stalled after 10 iterations with no progress. Giving up.
+ℹ️  Best-effort partial path at step 0: reached 76.27 from target
+ℹ️  Event-triggered replan (step 3): partial path, reached 79.09 from target
+ℹ️  Best-effort partial path at step 3: reached 78.69 from target
+ℹ️  Event-triggered replan (step 6): partial path, reached 57.58 from target
+    Progress: 170/180 (94.4%)ℹ️  Best-effort partial path at step 0: reached 41.42 from target
+ℹ️  Event-triggered replan (step 3): partial path, reached 41.69 from target
+ℹ️  Event-triggered replan (step 6): partial path, reached 43.00 from target
+ℹ️  Best-effort partial path at step 6: reached 43.65 from target
+ℹ️  Best-effort partial path at step 9: reached 41.94 from target
+ℹ️  Best-effort partial path at step 10: reached 41.16 from target
+ℹ️  Best-effort partial path at step 11: reached 40.59 from target
+ℹ️  Best-effort partial path at step 11: reached 40.06 from target
+ℹ️  Best-effort partial path at step 13: reached 41.49 from target
+ℹ️  Best-effort partial path at step 13: reached 41.49 from target
+ℹ️  Best-effort partial path at step 13: reached 41.49 from target
+ℹ️  Best-effort partial path at step 13: reached 41.49 from target
+ℹ️  Best-effort partial path at step 13: reached 41.34 from target
+ℹ️  Best-effort partial path at step 14: reached 41.47 from target
+ℹ️  Best-effort partial path at step 14: reached 41.47 from target
+ℹ️  Best-effort partial path at step 14: reached 41.47 from target
+ℹ️  Best-effort partial path at step 14: reached 41.38 from target
+ℹ️  Best-effort partial path at step 15: reached 41.23 from target
+ℹ️  Best-effort partial path at step 15: reached 41.23 from target
+ℹ️  Best-effort partial path at step 15: reached 41.23 from target
+ℹ️  Best-effort partial path at step 15: reached 41.23 from target
+ℹ️  Best-effort partial path at step 15: reached 41.23 from target
+ℹ️  Best-effort partial path at step 15: reached 41.23 from target
+ℹ️  Best-effort partial path at step 15: reached 41.23 from target
+ℹ️  Best-effort partial path at step 15: reached 41.23 from target
+ℹ️  Best-effort partial path at step 15: reached 41.23 from target
+ℹ️  Best-effort partial path at step 15: reached 41.23 from target
+⚠️  Navigation stalled after 10 iterations with no progress. Giving up.
+ℹ️  Best-effort partial path at step 0: reached 16.13 from target
+ℹ️  Event-triggered replan (step 3): partial path, reached 17.14 from target
+ℹ️  Event-triggered replan (step 6): partial path, reached 17.60 from target
+ℹ️  Best-effort partial path at step 0: reached 9.82 from target
+ℹ️  Event-triggered replan (step 3): partial path, reached 12.87 from target
+ℹ️  Event-triggered replan (step 6): partial path, reached 10.81 from target
+ℹ️  Event-triggered replan (step 9): partial path, reached 8.99 from target
+ℹ️  Best-effort partial path at step 9: reached 8.97 from target
+ℹ️  Best-effort partial path at step 10: reached 7.72 from target
+ℹ️  Best-effort partial path at step 10: reached 7.72 from target
+ℹ️  Best-effort partial path at step 11: reached 7.67 from target
+ℹ️  Best-effort partial path at step 13: reached 8.11 from target
+ℹ️  Best-effort partial path at step 17: reached 8.12 from target
+ℹ️  Best-effort partial path at step 17: reached 8.12 from target
+ℹ️  Best-effort partial path at step 17: reached 8.12 from target
+ℹ️  Best-effort partial path at step 17: reached 8.12 from target
+ℹ️  Best-effort partial path at step 17: reached 8.12 from target
+ℹ️  Best-effort partial path at step 17: reached 8.12 from target
+ℹ️  Best-effort partial path at step 17: reached 8.12 from target
+ℹ️  Best-effort partial path at step 17: reached 8.12 from target
+ℹ️  Best-effort partial path at step 17: reached 8.12 from target
+ℹ️  Best-effort partial path at step 17: reached 8.12 from target
+⚠️  Navigation stalled after 10 iterations with no progress. Giving up.
+ℹ️  Best-effort partial path at step 0: reached 39.85 from target
+ℹ️  Event-triggered replan (step 3): partial path, reached 37.00 from target
+ℹ️  Event-triggered replan (step 6): partial path, reached 35.86 from target
+ℹ️  Event-triggered replan (step 11): partial path, reached 32.27 from target
+ℹ️  Best-effort partial path at step 0: reached 57.00 from target
+ℹ️  Event-triggered replan (step 3): partial path, reached 59.59 from target
+ℹ️  Event-triggered replan (step 6): partial path, reached 27.93 from target
+ℹ️  Event-triggered replan (step 11): partial path, reached 31.41 from target
+ℹ️  Event-triggered replan (step 20): partial path, reached 35.35 from target
+ℹ️  Best-effort partial path at step 20: reached 33.93 from target
+ℹ️  Best-effort partial path at step 21: reached 34.39 from target
+ℹ️  Best-effort partial path at step 21: reached 34.39 from target
+ℹ️  Best-effort partial path at step 21: reached 34.39 from target
+ℹ️  Best-effort partial path at step 21: reached 34.05 from target
+ℹ️  Best-effort partial path at step 22: reached 33.90 from target
+ℹ️  Best-effort partial path at step 22: reached 33.90 from target
+ℹ️  Best-effort partial path at step 22: reached 33.90 from target
+ℹ️  Best-effort partial path at step 22: reached 33.90 from target
+ℹ️  Best-effort partial path at step 22: reached 33.90 from target
+ℹ️  Best-effort partial path at step 22: reached 33.90 from target
+ℹ️  Best-effort partial path at step 22: reached 33.90 from target
+ℹ️  Best-effort partial path at step 22: reached 33.90 from target
+ℹ️  Best-effort partial path at step 22: reached 33.90 from target
+ℹ️  Best-effort partial path at step 22: reached 33.90 from target
+⚠️  Navigation stalled after 10 iterations with no progress. Giving up.
+ℹ️  Best-effort partial path at step 0: reached 65.93 from target
+ℹ️  Event-triggered replan (step 3): partial path, reached 63.62 from target
+ℹ️  Event-triggered replan (step 6): partial path, reached 68.01 from target
+ℹ️  Best-effort partial path at step 6: reached 68.01 from target
+ℹ️  Best-effort partial path at step 6: reached 67.74 from target
+ℹ️  Best-effort partial path at step 7: reached 68.22 from target
+ℹ️  Best-effort partial path at step 7: reached 68.05 from target
+ℹ️  Best-effort partial path at step 9: reached 68.98 from target
+ℹ️  Best-effort partial path at step 9: reached 68.98 from target
+ℹ️  Best-effort partial path at step 9: reached 68.74 from target
+ℹ️  Best-effort partial path at step 10: reached 68.84 from target
+ℹ️  Best-effort partial path at step 10: reached 68.84 from target
+ℹ️  Best-effort partial path at step 10: reached 68.84 from target
+ℹ️  Best-effort partial path at step 10: reached 68.84 from target
+ℹ️  Best-effort partial path at step 10: reached 67.62 from target
+ℹ️  Event-triggered replan (step 20): partial path, reached 72.18 from target
+ℹ️  Best-effort partial path at step 20: reached 68.14 from target
+ℹ️  Best-effort partial path at step 0: reached 15.47 from target
+ℹ️  Event-triggered replan (step 3): partial path, reached 13.19 from target
+ℹ️  Event-triggered replan (step 6): partial path, reached 13.96 from target
+ℹ️  Event-triggered replan (step 10): partial path, reached 16.13 from target
+ℹ️  Event-triggered replan (step 14): partial path, reached 17.65 from target
+ℹ️  Best-effort partial path at step 14: reached 17.77 from target
+ℹ️  Best-effort partial path at step 16: reached 16.95 from target
+ℹ️  Best-effort partial path at step 17: reached 16.68 from target
+ℹ️  Best-effort partial path at step 21: reached 17.74 from target
+ℹ️  Best-effort partial path at step 21: reached 17.74 from target
+ℹ️  Best-effort partial path at step 21: reached 17.74 from target
+ℹ️  Best-effort partial path at step 21: reached 17.74 from target
+ℹ️  Best-effort partial path at step 21: reached 17.74 from target
+ℹ️  Best-effort partial path at step 21: reached 17.74 from target
+ℹ️  Best-effort partial path at step 21: reached 17.74 from target
+ℹ️  Best-effort partial path at step 22: reached 17.77 from target
+ℹ️  Best-effort partial path at step 25: reached 17.34 from target
+ℹ️  Best-effort partial path at step 25: reached 17.34 from target
+ℹ️  Best-effort partial path at step 25: reached 17.34 from target
+ℹ️  Best-effort partial path at step 25: reached 17.34 from target
+ℹ️  Best-effort partial path at step 25: reached 17.34 from target
+ℹ️  Best-effort partial path at step 26: reached 17.56 from target
+ℹ️  Best-effort partial path at step 26: reached 17.56 from target
+ℹ️  Best-effort partial path at step 26: reached 17.56 from target
+ℹ️  Best-effort partial path at step 26: reached 17.56 from target
+ℹ️  Best-effort partial path at step 26: reached 17.56 from target
+ℹ️  Best-effort partial path at step 26: reached 17.56 from target
+ℹ️  Best-effort partial path at step 26: reached 17.51 from target
+ℹ️  Best-effort partial path at step 28: reached 17.93 from target
+ℹ️  Best-effort partial path at step 28: reached 17.91 from target
+ℹ️  Best-effort partial path at step 38: reached 17.86 from target
+ℹ️  Best-effort partial path at step 38: reached 17.86 from target
+ℹ️  Best-effort partial path at step 38: reached 17.86 from target
+ℹ️  Best-effort partial path at step 38: reached 17.86 from target
+ℹ️  Best-effort partial path at step 38: reached 17.86 from target
+ℹ️  Best-effort partial path at step 38: reached 17.86 from target
+ℹ️  Best-effort partial path at step 38: reached 17.86 from target
+ℹ️  Best-effort partial path at step 38: reached 17.86 from target
+ℹ️  Best-effort partial path at step 38: reached 17.86 from target
+ℹ️  Best-effort partial path at step 38: reached 17.86 from target
+⚠️  Navigation stalled after 10 iterations with no progress. Giving up.
+    Progress: 180/180 (100.0%)
+    AdaptiveMCMCAgent: 19/30 success (63.3%), avg time: 425.449s
+
+============================================================
+Experiment Complete!
+============================================================
+Saved individual trials to: results/full_experiment_v4/trials_20251223_203816.json
+Saved aggregated stats to: results/full_experiment_v4/stats_20251223_203816.json
+Saved config to: results/full_experiment_v4/config_20251223_203816.json
+
+============================================================
+Experiment Summary
+============================================================
+
+Overall Statistics:
+  Total Trials: 180
+  Successful Trials: 139
+  Success Rate: 77.22%
+  Mean Path Length: 239.31
+  Mean Computation Time: 104.1186s
+
+============================================================
+Breakdown by Agent and Complexity
+============================================================
+
+EASY (grid: (6, 6)):
+  RRTAgent:
+    Success Rate: 100.00% (30/30)
+    Mean Path Length: 230.87
+    Mean Time: 1.5857s
+  AdaptiveMCMCAgent:
+    Success Rate: 100.00% (30/30)
+    Mean Path Length: 193.07
+    Mean Time: 16.7668s
+
+MEDIUM (grid: (8, 8)):
+  RRTAgent:
+    Success Rate: 56.67% (17/30)
+    Mean Path Length: 241.05
+    Mean Time: 20.7635s
+  AdaptiveMCMCAgent:
+    Success Rate: 50.00% (15/30)
+    Mean Path Length: 183.96
+    Mean Time: 140.4905s
+
+HARD (grid: (10, 10)):
+  RRTAgent:
+    Success Rate: 93.33% (28/30)
+    Mean Path Length: 300.50
+    Mean Time: 19.6567s
+  AdaptiveMCMCAgent:
+    Success Rate: 63.33% (19/30)
+    Mean Path Length: 277.63
+    Mean Time: 425.4487s
+
+✓ Experiment complete! Results saved to: results/full_experiment_v4
+
+======================================================================
+NEXT STEPS: Analyze Your Results
+======================================================================
+
+1. Generate comparative plots and statistical analysis:
+   python experiments/analyze_results.py results/full_experiment_v4/trials_*.json
+   → Creates: success_rates.png, computation_time.png, path_length.png,
+              replans_by_complexity.png, belief_convergence.png,
+              statistical_report.txt
+
+2. Visualize belief evolution for individual trials:
+   python experiments/visualize_belief_evolution.py results/full_experiment_v4/trials_*.json --trial-index 0
+   → Creates: belief evolution plots with uncertainty ellipses
+   Options: --agent AdaptiveMCMCAgent --complexity easy --plot-all
+
+3. Analyze replanning behavior:
+   python experiments/analyze_replanning.py results/full_experiment_v4/trials_*.json
+   → Creates: replan_frequency_histogram.png, replans_vs_success.png,
+              entropy_reduction_analysis.png, replan_analysis_report.txt
+
+======================================================================

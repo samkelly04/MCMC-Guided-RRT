@@ -1,0 +1,119 @@
+{
+  "experiment_timestamp": "20251223_203816",
+  "total_trials": 180,
+  "agents": [
+    "RRTAgent",
+    "AdaptiveMCMCAgent"
+  ],
+  "complexity_levels": [
+    "easy",
+    "hard",
+    "medium"
+  ],
+  "overall": {
+    "success_rate": 0.7722222222222223,
+    "mean_steps": 44.44604316546763,
+    "mean_computation_time": 104.11864150740051,
+    "mean_path_length": 239.3134430434785,
+    "total_trials": 180,
+    "successful_trials": 139
+  },
+  "by_complexity": {
+    "easy": {
+      "success_rate": 1.0,
+      "mean_steps": 36.03333333333333,
+      "mean_computation_time": 9.176235791679938,
+      "mean_path_length": 211.97078953705807,
+      "total_trials": 60,
+      "successful_trials": 60
+    },
+    "hard": {
+      "success_rate": 0.7833333333333333,
+      "mean_steps": 58.829787234042556,
+      "mean_computation_time": 222.55266739445895,
+      "mean_path_length": 291.2574303400661,
+      "total_trials": 60,
+      "successful_trials": 47
+    },
+    "medium": {
+      "success_rate": 0.5333333333333333,
+      "mean_steps": 39.09375,
+      "mean_computation_time": 80.62702133606265,
+      "mean_path_length": 214.28818702615382,
+      "total_trials": 60,
+      "successful_trials": 32
+    }
+  },
+  "by_agent": {
+    "RRTAgent": {
+      "success_rate": 0.8333333333333334,
+      "mean_steps": 57.986666666666665,
+      "mean_computation_time": 14.001960308350519,
+      "mean_path_length": 259.1726844385446,
+      "total_trials": 90,
+      "successful_trials": 75
+    },
+    "AdaptiveMCMCAgent": {
+      "success_rate": 0.7111111111111111,
+      "mean_steps": 28.578125,
+      "mean_computation_time": 194.2353227064505,
+      "mean_path_length": 216.04089453363548,
+      "total_trials": 90,
+      "successful_trials": 64
+    }
+  },
+  "by_agent_complexity": {
+    "RRTAgent": {
+      "easy": {
+        "success_rate": 1.0,
+        "mean_steps": 49.766666666666666,
+        "mean_computation_time": 1.585668515274301,
+        "mean_path_length": 230.86667953726433,
+        "total_trials": 30,
+        "successful_trials": 30
+      },
+      "hard": {
+        "success_rate": 0.9333333333333333,
+        "mean_steps": 69.0,
+        "mean_computation_time": 19.65667743762024,
+        "mean_path_length": 300.5044129739498,
+        "total_trials": 30,
+        "successful_trials": 28
+      },
+      "medium": {
+        "success_rate": 0.5666666666666667,
+        "mean_steps": 54.35294117647059,
+        "mean_computation_time": 20.763534972157018,
+        "mean_path_length": 241.04866961778347,
+        "total_trials": 30,
+        "successful_trials": 17
+      }
+    },
+    "AdaptiveMCMCAgent": {
+      "easy": {
+        "success_rate": 1.0,
+        "mean_steps": 22.3,
+        "mean_computation_time": 16.766803068085572,
+        "mean_path_length": 193.0748995368518,
+        "total_trials": 30,
+        "successful_trials": 30
+      },
+      "hard": {
+        "success_rate": 0.6333333333333333,
+        "mean_steps": 43.8421052631579,
+        "mean_computation_time": 425.44865735129764,
+        "mean_path_length": 277.6302980375007,
+        "total_trials": 30,
+        "successful_trials": 19
+      },
+      "medium": {
+        "success_rate": 0.5,
+        "mean_steps": 21.8,
+        "mean_computation_time": 140.4905076999683,
+        "mean_path_length": 183.95964008897354,
+        "total_trials": 30,
+        "successful_trials": 15
+      }
+    }
+  }
+}

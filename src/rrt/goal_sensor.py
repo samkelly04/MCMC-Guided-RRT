@@ -38,6 +38,11 @@ class GoalObservationModel:
         self._config = config
         self._rng = np.random.default_rng(config.seed)
 
+    @property
+    def config(self) -> GoalSensorConfig:
+        """Return the sensor configuration."""
+        return self._config
+
     def observe(
         self, robot_position: np.ndarray, true_goal: np.ndarray
     ) -> Tuple[np.ndarray, np.ndarray]:

@@ -6,5 +6,6 @@ and grid-based random walk algorithms to ensure connectivity.
 """
 
 from .generator import generate_maze
+from .maze_environment import ContinuousMazeEnvironment
 
-__all__ = ["generate_maze"]
+__all__ = ["generate_maze", "ContinuousMazeEnvironment"]

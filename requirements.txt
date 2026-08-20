@@ -1,0 +1,10 @@
+# Core runtime
+numpy>=1.26
+shapely>=2.0
+matplotlib>=3.8
+
+# Statistical analysis (src/analysis, experiments/analyze_results.py)
+scipy>=1.11
+
+# Tests
+pytest>=8.0

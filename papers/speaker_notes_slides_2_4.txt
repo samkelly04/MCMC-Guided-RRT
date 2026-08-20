@@ -1,0 +1,73 @@
+SPEAKER NOTES — MCMC-Guided RRT Presentation
+Slides 2–4 Script
+================================================================================
+
+
+SLIDE 2 — Why sampling-based motion planning?  (~45 sec)
+--------------------------------------------------------------------------------
+
+The setting is standard robot motion planning: given a continuous configuration
+space — in our case the 2D plane — find a collision-free path from a start to a
+goal. Grid-based methods are the obvious first attempt, but they scale
+exponentially with dimension and break down when obstacle geometry is irregular.
+Trajectory optimization is faster but gets trapped in local minima whenever the
+obstacle set is non-convex, which is essentially always in real environments.
+
+Sampling-based planners sidestep both problems. The Rapidly-exploring Random
+Tree — RRT — grows a tree from the start by repeatedly sampling a random
+configuration, finding its nearest neighbor in the tree with a KD-tree lookup,
+and steering toward it by a fixed step size. The result is a space-filling tree
+that's fast to build and, in the limit, probabilistically complete.
+
+The catch — and this is the starting point for everything that follows — is that
+vanilla RRT samples uniformly from free space. It has no model of where the goal
+is, and no way to exploit prior information. That's fine if the goal is a known
+point. It becomes a problem when the goal is uncertain.
+
+
+SLIDE 3 — Prior work biases toward a known goal  (~40 sec)
+--------------------------------------------------------------------------------
+
+Once you accept that uniform sampling is inefficient, the natural fix is to bias
+toward the goal. Goal-biased RRT does this literally — with some probability p,
+usually five to ten percent, you sample the goal location directly instead of a
+random point. RRT-Connect goes further and grows two trees simultaneously, one
+from the start and one from the goal, connecting them in the middle. Informed
+RRT-star is more principled: once you have any path, you restrict future samples
+to the ellipsoidal region that could possibly improve it.
+
+All three of these are better than uniform RRT — but they all share a hidden
+assumption: that the goal is a known, fixed point in free space. In practice,
+that assumption breaks in exactly the situations where you most want a planner.
+Search and rescue: you know roughly where a person is from a radio signal, but
+not exactly. Autonomous exploration: your sensor flagged a region of interest,
+but the estimate has noise. In every case, what you actually have is a
+distribution over the goal location — and none of the standard methods know what
+to do with that.
+
+Our angle: represent the goal as a Gaussian belief, update it from noisy range
+observations as the robot moves, and build a sampler that acts on the belief
+rather than a fixed point. The right panel shows the structure — we'll get into
+the mechanics next.
+
+
+SLIDE 4 — Environments: Procedurally Generated Mazes  (~35 sec)
+--------------------------------------------------------------------------------
+
+For evaluation we needed environments with controllable difficulty and varied
+topology, so we built a procedural maze generator. The algorithm runs a random
+walk over a discrete grid — ten-by-ten cells for easy, twenty-by-twenty for
+medium, thirty-by-thirty for hard — carving passages as it goes. That gives you
+the connectivity structure.
+
+The key implementation point is that those grid cells never appear in the actual
+planner. The maze walls get converted to rectangular Shapely polygons in a
+continuous hundred-by-hundred unit coordinate space, and the RRT samples from
+that continuous space using exact geometric collision checks — not lookups into
+a grid.
+
+You can see the three difficulty levels here: easy has open corridors and few
+decision points, medium starts creating bottlenecks, and hard has dense walls
+with many narrow passages that are easy to miss. Start is always bottom-left,
+goal is always top-right, and crucially — the planner only ever receives a noisy
+distance estimate to the goal, not its location.

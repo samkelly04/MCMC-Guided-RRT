@@ -116,14 +116,18 @@ log π(q) = -J(q) / T
 log α = min(0, log π(q') - log π(q))
 ```
 
-### Expected Distance Under Goal Belief
-For Gaussian goal belief `N(μ, Σ)`:
-- **Exact**: Can compute `E[||q - q_goal||]` analytically (involves error functions)
-- **Approximate**: Use distance to mean plus uncertainty penalty
-  ```
-  E[distance] ≈ ||q - μ|| + trace(Σ) / (2 ||q - μ||)
-  ```
-- **Robust**: For distributional robustness, can use worst-case or quantile distance
+### Composite Cost Function for Goal Belief
+For Gaussian goal belief `N(μ, Σ)`, we use a composite cost:
+```
+J(q) = ||q - μ|| - λ_info × I(q, Σ)
+```
+- **Exploitation term**: Pure distance `||q - μ||` with minimum at belief mean
+- **Exploration term**: Information gain `I(q, Σ)` rewards uncertainty reduction
+- **Explicit control**: `λ_info` directly modulates exploration-exploitation balance
+
+This avoids the "volcano effect" of far-field Taylor expansions which place
+the minimum at a ring around μ instead of at μ itself. Exploration is delegated
+to the information gain term where it can be properly controlled.
 
 ---
 

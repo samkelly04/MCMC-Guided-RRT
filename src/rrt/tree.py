@@ -36,7 +36,8 @@ class Tree:
             ValueError: If parent_idx is invalid
         """
         self.positions = np.vstack((self.positions, position))
-        self.parents = np.vstack((self.parents, parent_idx))
+        # Parents should be 1D array, use append or concatenate
+        self.parents = np.append(self.parents, parent_idx)
         return len(self.positions) - 1
     
     def get_node_position(self, idx: int) -> np.ndarray:
@@ -67,9 +68,11 @@ class Tree:
         Raises:
             IndexError: If idx is out of bounds
         """
-        return self.parents[idx]
         if idx < 0 or idx >= len(self.parents):
             raise IndexError("Index out of bounds")
+        # Ensure parents is 1D for indexing
+        parents_1d = self.parents.flatten() if self.parents.ndim > 1 else self.parents
+        return int(parents_1d[idx])
     
     def get_path_to_root(self, node_idx: int) -> List[np.ndarray]:
         """
@@ -86,9 +89,11 @@ class Tree:
         """
         path = []
         curr_idx = node_idx
+        # Ensure parents is 1D for indexing
+        parents_1d = self.parents.flatten() if self.parents.ndim > 1 else self.parents
         while curr_idx != -1:
             path.append(self.positions[curr_idx])
-            curr_idx = self.parents[curr_idx]
+            curr_idx = int(parents_1d[curr_idx])
         
         return path
 

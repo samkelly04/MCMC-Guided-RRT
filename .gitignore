@@ -1,4 +1,38 @@
-.venv/ # tell Git to ignore that heavy folder
+# Environments
 .venv/
-.venv/
+venv/
 __pycache__/
+*.py[cod]
+
+# Tooling / editor
+.DS_Store
+.claude/
+.cursor/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Raw per-trial MCMC sample dumps (~200 MB of pickles, written automatically
+# by experiments/run_batch_comparison.py). Aggregate statistics, figures and
+# statistical reports under results/ ARE tracked.
+results/**/sample_data/
+*.pkl
+
+# Figures written to the repo root by the test suite and examples
+/maze_visualization.png
+/maze_comparison.png
+/maze_visualization_standalone.png
+tests/maze_navigation_result.png
+
+# Local AI-assistant context (not published)
+CLAUDE.md
+
+# Scratch / superseded experiment runs (kept locally, not published).
+# The primary 180-trial results live in results/full_experiment_v4/
+# and results/analysis_v4/.
+results/quick_test/
+results/partial_analysis/
+results/telemetry_test.json
+
+# Figure produced by experiments/visualize_adaptive_paths.py under a stale
+# configuration that contradicts the headline results (see note in that script).
+results/adaptive_mcmc_paths.png

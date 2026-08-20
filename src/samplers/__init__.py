@@ -7,6 +7,7 @@ a shared interface defined by BaseSampler.
 
 from .base import BaseSampler
 from .uniform import UniformSampler
+from .adaptive_goal_mcmc import AdaptiveGoalMCMCSampler
 
-__all__ = ["BaseSampler", "UniformSampler"]
+__all__ = ["BaseSampler", "UniformSampler", "AdaptiveGoalMCMCSampler"]
 

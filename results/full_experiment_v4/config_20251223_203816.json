@@ -1,0 +1,56 @@
+{
+  "output_dir": "results/full_experiment_v4",
+  "save_individual_results": true,
+  "save_aggregated_results": true,
+  "verbose": true,
+  "complexity_levels": [
+    {
+      "level": "easy",
+      "num_maps": 30,
+      "trials_per_map": 1,
+      "maze_config": {
+        "space_size": [
+          100.0,
+          100.0
+        ],
+        "grid_size": [
+          6,
+          6
+        ],
+        "wall_thickness": 1.0
+      }
+    },
+    {
+      "level": "medium",
+      "num_maps": 30,
+      "trials_per_map": 1,
+      "maze_config": {
+        "space_size": [
+          100.0,
+          100.0
+        ],
+        "grid_size": [
+          8,
+          8
+        ],
+        "wall_thickness": 1.0
+      }
+    },
+    {
+      "level": "hard",
+      "num_maps": 30,
+      "trials_per_map": 1,
+      "maze_config": {
+        "space_size": [
+          100.0,
+          100.0
+        ],
+        "grid_size": [
+          10,
+          10
+        ],
+        "wall_thickness": 1.0
+      }
+    }
+  ]
+}

@@ -1,0 +1,225 @@
+
+
+SLIDE 2 — Why sampling-based motion planning?  (~45 sec)
+--------------------------------------------------------------------------------
+
+Generally, sampling based planners arise in problems where we are limited by the computational complexity and optimization landscape presented by some robotic navigation task.
+Sampling-based planners aim to sidestep both of these problems. The particular method I will be discussing today and my own variant of is the Rapidly-exploring Random
+Tree — RRT, which grows a tree from the start by repeatedly sampling a random
+configuration, finding its nearest neighbor in the tree,
+and steering toward. The result is a space-filling tree
+that's fast to build and probabilistically complete.
+
+The catch is that vanilla RRT samples uniformly from free space and operates with no model of a navigation goal. 
+
+
+================================================================================
+
+SLIDE 3 — Prior work biases toward a known goal  (~40 sec)
+--------------------------------------------------------------------------------
+
+A natural idea to incorporate knowledge of the goal is to direct a bias towards the goal in the our sampls. Goal-biased RRT does this literally — with some probability p,
+you sampling the goal location directly instead of a
+random point. RRT-Connect goes further and grows two trees simultaneously, one
+from the start and one from the goal, connecting them in the middle. Informed
+RRT-star is more principled: once you have any path, you restrict future samples
+to the ellipsoidal region that could possibly improve it.
+
+All three of these are better than uniform RRT but they all
+assume that the goal is a known, fixed point in free space. In practice,
+that assumption breaks down in several safety critical scenarios such as search and rescue or autonomous exploration
+
+
+================================================================================
+
+SLIDE 4 — Environments: Procedurally Generated Mazes  (~35 sec)
+--------------------------------------------------------------------------------
+
+For evaluation we needed environments with controllable difficulty and varied
+topology, so we built a procedural maze generator. The algorithm runs a random
+walk over a discrete grid — ten-by-ten cells for easy, twenty-by-twenty for
+medium, thirty-by-thirty for hard.
+
+The key implementation point is that those grid cells never appear in the actual
+planner. The maze walls get converted to rectangular polygons in a
+continuous hundred-by-hundred unit coordinate space, and the RRT samples from
+that continuous space using exact geometric collision checks.
+
+
+
+================================================================================
+
+SLIDE 5 — The system, end-to-end  (~40 sec)
+--------------------------------------------------------------------------------
+
+So now that we know what environment we're operating in, let's look at how the
+full system fits together before we go into any individual component.
+
+The planner runs as a continuous loop across five stages. The robot takes a
+noisy distance observation to the goal during the sense step. That observation
+feeds a Kalman filter update, which refines the Gaussian belief over goal
+location. The updated belief then feeds the sampler, which is where the core
+contribution lives. The sampler then produces candidate
+configurations, the RRT extends the tree toward them, and the robot executes a
+partial path before the loop repeats.
+
+A few implementation details worth flagging: The MCMC chain runs
+Metropolis-Hastings targeting a Boltzmann distribution at temperature ten 
+that distribution is defined by the cost function we'll see later.
+
+Additionally, loop doesn't replan on every step. It replans only when the entropy of the
+belief distribution drops past a threshold, which is the trigger condition shown at the
+bottom.
+
+
+================================================================================
+
+SLIDE 6 — The sampler: lambda biasing  (~45 sec)
+--------------------------------------------------------------------------------
+
+At each iteration we need a candidate configuration to grow the RRT toward. With probability one-minus-lambda we draw
+from an MCMC chain, and with probability lambda we draw uniformly at random from
+free space. In our experiments lambda is fixed at 0.30.
+
+The reason you need the mix comes down to probabilistic completeness. Pure MCMC
+concentrates its mass around the current belief mean. If that estimate is wrong early in the mission, the chain gets stuck, and the planner can fail even when a valid path exists.
+The thirty percent uniform component prevents this and guarantees the
+tree will eventually reach any reachable configuration regardless of where the
+belief is pointing.
+
+On the MCMC side: the chain runs Metropolis-Hastings with a Gaussian proposal, and the target distribution is Boltzmann — pi of q. The chain
+state is preserved between planning rounds so it doesn't restart cold.
+
+
+================================================================================
+
+SLIDE 7 — Information-aware cost function  (~45 sec)
+--------------------------------------------------------------------------------
+
+That Boltzmann distribution the MCMC chain targets is defined by this cost
+function that we are about to unpack.
+
+J of q has three terms. The first is just Euclidean distance to the belief mean
+mu. This is convex with a global minimum at mu, which produces the well-behavied gradient landscape necessary for MCMC methods.
+
+The second term is a clearance penalty, which creates a
+repulsive potential that grows as the robot approaches walls. Anything in
+collision or out of bounds gets assigned infinite cost.
+
+The third term is where the active perception comes in. For any candidate
+configuration q, we simulate what would happen if the robot took a sensor reading
+from there. We then run a hypothetical Kalman update and compute how much the total
+variance of the belief would shrink. That expected reduction in variance is the
+information gain. We subtract it from the cost, so high-information positions are
+cheaper to visit. 
+
+
+
+================================================================================
+
+SLIDE 8 — Goal belief: Kalman-style updates  (~35 sec)
+--------------------------------------------------------------------------------
+
+The cost function we just saw depends on the current belief over goal location, which we are now going to address the mechanics of.
+
+We represent it as a Gaussian: mean mu is our best estimate of where the goal
+is, covariance Sigma captures our uncertainty. At each step the robot takes a
+range observation  and runs a standard Kalman
+update.
+
+The noise model is distance-dependent: variance scales linearly with distance, so
+observations taken close to the goal are more informative than ones taken far
+away. 
+
+Two properties worth noting: covariance reduction is monotonic, so the belief
+can only sharpen over time, never widen. Second, the module is fully decoupled from
+the RRT — it just takes observations in and emits an updated Gaussian. The
+convergence plot on the right shows this playing out across all ninety MCMC-agent
+trials.
+
+
+================================================================================
+
+SLIDE 9 — Receding horizon execution  (~35 sec)
+--------------------------------------------------------------------------------
+
+With the belief module in place, the last architectural piece is deciding when
+to replan.
+
+The naive approach is to replan on every step — every time you take an
+observation, throw away the current plan and compute a new one. That's
+expensive: each planning episode runs up to fifteen thousand RRT iterations with
+Shapely collision checks at a third of a millisecond each. 
+
+Instead we use an entropy trigger. After each observation we compute the Shannon
+entropy of the belief. If it dropped by more than a threshold we replan. If the belief
+didn't change much, we keep executing the current plan.
+
+The bar chart on the right shows the practical consequence: easy mazes average
+about five and a half replans per trial, medium around eight, and hard around
+thirteen and a half. 
+
+
+================================================================================
+
+SLIDE 10 — Empirical evaluation: 180 trials  (~40 sec)
+--------------------------------------------------------------------------------
+
+ We ran 180 trials total — thirty per
+agent per difficulty level — tracking success rate, computation time, path
+length, and replan count.
+
+MCMC gets sixty-three percent on hard mazes, baseline RRT gets ninety-three.
+Across all difficulty levels, MCMC is eight to twenty-two times slower.
+On easy and medium mazes the success rates are comparable, and on those difficulties the MCMC agent
+does find shorter paths — statistically significant via Mann-Whitney. 
+
+
+
+================================================================================
+
+SLIDE 11 — What we learned  (~40 sec)
+--------------------------------------------------------------------------------
+
+
+On the left you can see what worked. The belief integration is solid — covariance
+converges in every single trial, no exceptions. Lambda biasing provably helps:
+we ran ablations with pure MCMC and the local-minimum failure rate went up
+significantly. The information gain term does guide the tree toward sensing
+useful positions. And on the mazes where the system succeeds, and the paths are
+genuinely shorter.
+
+The failures are on the right, and they're mostly about hyperparameters that
+weren't tuned per difficulty. The entropy threshold that triggers replanning is
+the biggest one: on hard mazes, thirteen-plus replans at fifteen thousand
+iterations each is simply too much. A coarser trigger, or an adaptive one that
+loosens as the maze gets harder, would help substantially. Similarly, lambda
+of zero point three and temperature ten were fixed across all experiments and
+hard mazes likely want a colder chain and more uniform exploration early on.
+
+The path length figure on the right gives the clearest view of where the signal
+is. On easy and medium, the MCMC bars are shorter. On hard, they disappear
+because the success rate drops.
+
+
+================================================================================
+
+SLIDE 12 — What's reusable  (~35 sec)
+--------------------------------------------------------------------------------
+
+The aggregate result is mixed, but I want to close by making clear parts of this project 
+that interested individuals could use for their own work, again found on my Github.
+
+The MCMC sampler is a self-contained module — Metropolis-Hastings with a lambda
+mix and a swappable cost function. Drop it into any RRT-style planner and it
+will bias sampling toward wherever your cost function says is interesting.
+
+The goal-belief module is also fully decoupled. It's a Kalman filter with
+distance-dependent noise, and it outputs a Gaussian. Any planner that needs to
+localize a target while executing can plug it in directly.
+
+The evaluation harness ran all 180 trials with statistical tests baked in including —
+Mann-Whitney, chi-square, Cohen's d — and logged full telemetry per trial. That
+infrastructure is reusable for any future comparison on this benchmark.
+
+Thank you for your time and attention. 

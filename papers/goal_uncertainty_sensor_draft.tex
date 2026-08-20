@@ -1,0 +1,128 @@
+\subsection{Goal Uncertainty Representation}
+
+In contrast to standard RRT planning where the goal location $q_{\text{goal}}$ is known exactly, we consider the case where the true goal position is unknown and must be inferred from noisy sensor observations. The planner maintains a probabilistic belief over the goal location, which evolves as new observations are collected during navigation.
+
+We represent the goal belief as a multivariate Gaussian distribution:
+\begin{equation}
+    P(q_{\text{goal}} | \mathcal{Z}) = \mathcal{N}(\mu, \Sigma)
+\end{equation}
+where $\mu \in \mathbb{R}^2$ is the mean vector representing the best estimate of the goal location, $\Sigma \in \mathbb{R}^{2 \times 2}$ is the covariance matrix encoding uncertainty, and $\mathcal{Z} = \{z_1, z_2, \ldots, z_k\}$ denotes the set of $k$ observations collected thus far. The Gaussian representation is chosen for its computational tractability and compatibility with Kalman filtering techniques, enabling efficient sequential belief updates.
+
+The initial belief $P(q_{\text{goal}} | \emptyset)$ is typically initialized with high uncertainty, reflecting the lack of prior information. Common initialization strategies include a uniform prior over the workspace (approximated as a Gaussian with large covariance) or a centered distribution with covariance $\Sigma_0 = \sigma_0^2 \mathbf{I}$ where $\sigma_0$ is chosen to reflect the workspace scale. As observations accumulate, the belief distribution becomes increasingly concentrated around the true goal location, with the covariance $\Sigma$ decreasing monotonically under appropriate sensor models.
+
+\subsection{Sensor Model}
+
+The robot obtains noisy observations of the goal location through a sensor that provides distance-dependent measurements. At each time step, when the robot is at position $q_{\text{robot}} \in \mathcal{X}_{\text{free}}$, the sensor generates an observation:
+\begin{equation}
+    z = q_{\text{goal}} + w
+\end{equation}
+where $w \sim \mathcal{N}(\mathbf{0}, R(d))$ is zero-mean Gaussian noise with covariance $R(d)$ that depends on the distance $d = \|q_{\text{robot}} - q_{\text{goal}}\|$ between the robot and the true goal location.
+
+The observation noise covariance is modeled as:
+\begin{equation}
+    R(d) = \sigma^2(d) \mathbf{I}
+\end{equation}
+where $\mathbf{I}$ is the $2 \times 2$ identity matrix (isotropic noise) and the standard deviation $\sigma(d)$ follows a distance-dependent model:
+\begin{equation}
+    \sigma(d) = \sigma_{\text{near}} + (\sigma_{\text{far}} - \sigma_{\text{near}}) \cdot \min\left(\frac{d}{d_{\text{scale}}}, 1\right)
+\end{equation}
+Here, $\sigma_{\text{far}}$ and $\sigma_{\text{near}}$ represent the noise standard deviation when the robot is far from and near to the goal, respectively, with $\sigma_{\text{far}} > \sigma_{\text{near}} > 0$. The parameter $d_{\text{scale}} > 0$ controls the distance at which the noise transitions from $\sigma_{\text{far}}$ toward $\sigma_{\text{near}}$, creating a linear interpolation between these extremes.
+
+This distance-dependent noise model captures the realistic behavior of many sensing modalities (e.g., visual, acoustic, or radio-frequency sensors) where measurement accuracy improves as the sensor approaches the target. When $d \ll d_{\text{scale}}$, the noise approaches $\sigma_{\text{near}}$, providing high-precision observations. Conversely, when $d \gg d_{\text{scale}}$, the noise approaches $\sigma_{\text{far}}$, reflecting the degraded accuracy at long range. The isotropic structure of $R(d)$ assumes that measurement errors are equally uncertain in all directions, which is appropriate for sensors without directional bias.
+
+\subsection{Belief Update Mechanism}
+
+As the robot navigates and collects sensor observations, the goal belief is updated sequentially using a Kalman-style filter. When a new observation $z_t$ is obtained at robot position $q_{\text{robot},t}$ with observation covariance $R(d_t)$ (where $d_t = \|q_{\text{robot},t} - q_{\text{goal}}\|$), the belief is updated from $P(q_{\text{goal}} | \mathcal{Z}_{t-1}) = \mathcal{N}(\mu_{t-1}, \Sigma_{t-1})$ to $P(q_{\text{goal}} | \mathcal{Z}_t) = \mathcal{N}(\mu_t, \Sigma_t)$ via the following update equations:
+
+\begin{align}
+    \nu_t &= z_t - \mu_{t-1} \label{eq:innovation} \\
+    S_t &= \Sigma_{t-1} + R(d_t) \label{eq:innovation_cov} \\
+    K_t &= \Sigma_{t-1} S_t^{-1} \label{eq:kalman_gain} \\
+    \mu_t &= \mu_{t-1} + K_t \nu_t \label{eq:mean_update} \\
+    \Sigma_t &= (\mathbf{I} - K_t) \Sigma_{t-1} \label{eq:cov_update}
+\end{align}
+
+Here, $\nu_t$ is the \emph{innovation} (the difference between the observation and the prior mean), $S_t$ is the \emph{innovation covariance} (the total uncertainty in the innovation), and $K_t$ is the \emph{Kalman gain} that determines how much weight to assign to the new observation relative to the prior belief. The mean update shifts the belief estimate toward the observation, while the covariance update deterministically reduces uncertainty, with the reduction depending only on the relative magnitudes of $\Sigma_{t-1}$ and $R(d_t)$, not on the specific observation value.
+
+\subsubsection{Justification for Kalman Filtering with Position-Dependent Observations}
+
+A natural concern arises from the fact that observations are not identically distributed: the observation noise covariance $R(d_t)$ depends on the robot's position $q_{\text{robot},t}$ through the distance $d_t = \|q_{\text{robot},t} - q_{\text{goal}}\|$. However, the standard Kalman filter update equations remain valid and optimal under the following conditions, which are satisfied in our setting:
+
+\begin{enumerate}
+    \item \textbf{Linear observation model}: The observation equation $z_t = q_{\text{goal}} + w_t$ is linear in the state $q_{\text{goal}}$, satisfying the Kalman filter's linearity requirement.
+    
+    \item \textbf{Gaussian noise}: The observation noise $w_t \sim \mathcal{N}(\mathbf{0}, R(d_t))$ is Gaussian, even though its covariance $R(d_t)$ varies with position.
+    
+    \item \textbf{Conditional independence}: Given the true goal location $q_{\text{goal}}$, observations are conditionally independent. The position-dependence enters only through the known observation covariance $R(d_t)$, which can be computed from the robot's current position and the current belief mean (or approximated using the true distance in simulation).
+    
+    \item \textbf{Known observation covariance}: At each update step, the observation covariance $R(d_t)$ is known (computed from the distance-dependent noise model), allowing the Kalman gain to be computed correctly.
+\end{enumerate}
+
+The key insight is that the Kalman filter's optimality properties hold for \emph{time-varying} observation noise, provided the noise covariance is known at each time step. The position-dependence of $R(d_t)$ does not violate the filter's assumptions; it simply means that the observation quality varies based on the robot's location relative to the goal. This is analogous to standard Kalman filtering with time-varying measurement noise, which is well-established in the literature~\cite{kalman1960}.
+
+Furthermore, the covariance update equation (\ref{eq:cov_update}) ensures that uncertainty reduction is predictable and monotonic: regardless of whether a particular observation is accurate or noisy (as determined by $R(d_t)$), the posterior covariance $\Sigma_t$ will be smaller than or equal to the prior covariance $\Sigma_{t-1}$, with the magnitude of reduction depending on the relative information content of the observation. This property is crucial for the information-theoretic active perception component of our approach, as it enables reliable prediction of information gain from hypothetical observations.
+
+It is worth noting that the belief update mechanism described above remains unchanged regardless of whether the belief is used in a standard cost function or an information-theoretic one. The Kalman update equations (\ref{eq:innovation})--(\ref{eq:cov_update}) are applied identically in both cases; the distinction lies only in how the updated belief is subsequently utilized for planning. When information gain is incorporated into the sampling cost function (as described later), the same update equations are used, but the belief also supports prediction of hypothetical information gain via the same Kalman update structure applied to a hypothetical observation scenario.
+
+\subsection{Information-Theoretic Cost Function for Planning Under Uncertainty}
+
+Having established how the goal belief evolves through observations, we now address how to translate this probabilistic belief into a utility function for path planning. In standard RRT planning with known goal location, the cost function naturally incorporates the Euclidean distance $\|q - q_{\text{goal}}\|$ to guide sampling toward the goal. Under goal uncertainty, however, we face a fundamental \emph{exploration-exploitation trade-off}: the planner must simultaneously (1) exploit current knowledge by moving toward the estimated goal location, and (2) explore to gather observations that reduce uncertainty about the true goal.
+
+This trade-off is central to efficient navigation under uncertainty. Pure exploitation---moving directly toward the belief mean---may lead to suboptimal paths if the initial estimate is poor. Conversely, pure exploration---seeking only informative observations---neglects the ultimate objective of reaching the goal. We address this by formulating a composite cost function that explicitly manages both objectives through principled information-theoretic reasoning.
+
+\subsubsection{Composite Cost Function}
+
+For a query point $q \in \mathcal{X}_{\text{free}}$ and current belief $P(q_{\text{goal}} | \mathcal{Z}) = \mathcal{N}(\mu, \Sigma)$, we employ a cost function that balances reaching the estimated goal location with reducing goal belief uncertainty:
+\begin{equation}
+    J(q) = \|q - \mu\| - \lambda_{\text{info}} \cdot \mathcal{I}(q, \Sigma)
+\end{equation}
+where $\|q - \mu\|$ represents the distance to the belief mean (the most likely goal location), $\mathcal{I}(q, \Sigma)$ denotes the expected information gain at configuration $q$, and $\lambda_{\text{info}} \geq 0$ is a weighting parameter governing the exploratory drive.
+
+This formulation provides a principled approach to goal-seeking under uncertainty. The first term, $\|q - \mu\|$, represents the \emph{exploitation} component: a convex function with a global minimum at the belief mean $\mu$, ensuring the agent is driven toward the target. The second term, $-\lambda_{\text{info}} \cdot \mathcal{I}(q, \Sigma)$, serves as an \emph{exploration reward} that prioritizes regions where observations are most likely to reduce belief entropy.
+
+This explicit separation of concerns offers several advantages over alternative formulations. First, the exploration-exploitation balance is \emph{controllable}: adjusting $\lambda_{\text{info}}$ directly modulates the trade-off without requiring modifications to the underlying cost structure. Second, the two objectives are \emph{aligned}: both terms favor proximity to the goal region---the distance term explicitly, and the information gain term implicitly through the distance-dependent sensor model (closer observations are more informative). Third, the formulation is \emph{adaptive}: as observations accumulate and $\Sigma$ decreases, the magnitude of achievable information gain diminishes, causing the cost function to converge naturally to the standard distance-to-goal metric.
+
+\textbf{Remark on distance approximations.} A common approach is to approximate the expected distance $\mathbb{E}[\|q - q_{\text{goal}}\| | \mathcal{Z}]$ using a far-field Taylor expansion, yielding $\|q - \mu\| + \text{tr}(\Sigma)/(2\|q - \mu\|)$. While mathematically valid for $\|q - \mu\| \gg \sqrt{\text{tr}(\Sigma)}$, this approximation exhibits pathological behavior near the goal: the cost function develops a ``volcano effect'' where the minimum occurs at a ring of radius $\sqrt{\text{tr}(\Sigma)/2}$ around the mean, rather than at $\mu$ itself. This artifact creates unintended repulsion from the goal and conflicts with information-theoretic objectives. The simple distance $\|q - \mu\|$ avoids these issues while delegating exploration incentives to the explicit information gain term, where they can be properly controlled.
+
+\subsubsection{Information Gain Computation}
+
+The information gain $\mathcal{I}(q, \Sigma)$ quantifies how much a hypothetical observation taken at position $q$ would reduce uncertainty about the goal location. Formally, it is defined as the expected reduction in belief entropy:
+\begin{equation}
+    \mathcal{I}(q, \Sigma) = H(\Sigma) - H(\Sigma_{\text{new}}(q))
+\end{equation}
+where $H(\cdot)$ is an entropy measure and $\Sigma_{\text{new}}(q)$ is the predicted posterior covariance after observing from position $q$.
+
+For computational efficiency, we use the trace of the covariance matrix as an entropy proxy:
+\begin{equation}
+    H(\Sigma) \approx \text{tr}(\Sigma)
+\end{equation}
+This approximation captures total uncertainty across all dimensions and is monotonic with the log-determinant for positive definite matrices, making it suitable for comparing uncertainty levels while avoiding the numerical instability of determinant computation.
+
+To compute the posterior covariance $\Sigma_{\text{new}}(q)$, we apply the Kalman update equations (\ref{eq:innovation})--(\ref{eq:cov_update}) \emph{hypothetically}, without modifying the actual belief state:
+\begin{align}
+    d_{\text{hyp}} &= \|q - \mu\| \label{eq:hyp_distance} \\
+    R_{\text{hyp}}(d_{\text{hyp}}) &= \sigma^2(d_{\text{hyp}}) \mathbf{I} \label{eq:hyp_obs_cov} \\
+    S_{\text{hyp}} &= \Sigma + R_{\text{hyp}}(d_{\text{hyp}}) \label{eq:hyp_innovation_cov} \\
+    K_{\text{hyp}} &= \Sigma S_{\text{hyp}}^{-1} \label{eq:hyp_kalman_gain} \\
+    \Sigma_{\text{new}}(q) &= (\mathbf{I} - K_{\text{hyp}}) \Sigma \label{eq:hyp_cov_update}
+\end{align}
+Here, $d_{\text{hyp}} = \|q - \mu\|$ is the distance to the belief mean (used as a proxy for distance to the true goal, which is unknown), and the observation noise $R_{\text{hyp}}$ follows the same distance-dependent model as the actual sensor. This approximation is reasonable when the belief is reasonably concentrated around the true goal.
+
+The information gain is then:
+\begin{equation}
+    \mathcal{I}(q, \Sigma) = \text{tr}(\Sigma) - \text{tr}(\Sigma_{\text{new}}(q)) = \text{tr}(\Sigma) - \text{tr}((\mathbf{I} - K_{\text{hyp}}) \Sigma)
+\end{equation}
+By the monotonic covariance reduction property established earlier, we have $\Sigma_{\text{new}}(q) \preceq \Sigma$, guaranteeing $\mathcal{I}(q, \Sigma) \geq 0$. Crucially, the distance-dependent sensor model ensures that information gain is maximized at locations close to the belief mean, where observations have lower noise. This creates a natural synergy with the exploitation term: both components of the cost function favor the goal region, but for complementary reasons.
+
+\subsubsection{Behavior and Convergence}
+
+The composite cost function exhibits intuitive behavior across the navigation lifecycle:
+
+\textbf{Early navigation (high uncertainty):} When $\Sigma$ is large, the information gain term $\mathcal{I}(q, \Sigma)$ can achieve large values, incentivizing the planner to visit locations that provide high-quality observations. This encourages active perception: the robot moves toward regions where it can best refine its goal estimate, even if this involves slight detours from the direct path to the current mean.
+
+\textbf{Late navigation (low uncertainty):} As observations accumulate and $\Sigma$ decreases, the maximum achievable information gain diminishes (since there is less uncertainty to reduce). The exploitation term $\|q - \mu\|$ becomes dominant, focusing the planner on reaching the now-confident goal estimate.
+
+\textbf{Limiting behavior:} In the limit of perfect certainty ($\Sigma \to \mathbf{0}$), we have $\mathcal{I}(q, \Sigma) \to 0$ for all $q$, and the cost function reduces to the standard distance-to-goal: $J(q) \to \|q - \mu\|$. This graceful convergence ensures compatibility with classical planning when uncertainty is negligible.
+
+The parameter $\lambda_{\text{info}}$ provides direct control over the exploration-exploitation balance. Higher values encourage more aggressive information-seeking behavior, which may be appropriate when initial uncertainty is very high or when the cost of reaching the wrong goal is substantial. Lower values favor more direct goal-seeking, appropriate when confidence is already reasonable or when exploration has significant cost.
+

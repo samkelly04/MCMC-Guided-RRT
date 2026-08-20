@@ -1,0 +1,125 @@
+SPEAKER NOTES — MCMC-Guided RRT Presentation
+Slides 8–12 Script
+================================================================================
+
+
+SLIDE 8 — Goal belief: Kalman-style updates  (~35 sec)
+--------------------------------------------------------------------------------
+
+The cost function we just saw depends on the current belief over goal location —
+so let's be concrete about what that belief is and how it evolves.
+
+We represent it as a Gaussian: mean mu is our best estimate of where the goal
+is, covariance Sigma captures our uncertainty. At each step the robot takes a
+range observation — noisy distance to the true goal — and runs a standard Kalman
+update. The innovation is z minus H-mu, the gain K is computed from the current
+covariance and the noise model, and the update shrinks Sigma toward zero.
+
+The noise model is distance-dependent: variance scales linearly with distance, so
+observations taken close to the goal are more informative than ones taken far
+away. This is a deliberate design choice — it models the physical reality that
+short-range sensors are more accurate, and it gives the information gain term in
+the cost function something meaningful to work with.
+
+Two properties worth noting: covariance reduction is monotonic, so the belief
+can only sharpen over time, never widen. And the module is fully decoupled from
+the RRT — it just takes observations in and emits an updated Gaussian. The
+convergence plot on the right shows this playing out across all ninety MCMC-agent
+trials — every single run tightens.
+
+
+SLIDE 9 — Receding horizon execution  (~35 sec)
+--------------------------------------------------------------------------------
+
+With the belief module in place, the last architectural piece is deciding when
+to replan.
+
+The naive approach is to replan on every step — every time you take an
+observation, throw away the current plan and compute a new one. That's
+expensive: each planning episode runs up to fifteen thousand RRT iterations with
+Shapely collision checks at a third of a millisecond each. On a hard maze that
+adds up fast.
+
+Instead we use an entropy trigger. After each observation we compute the Shannon
+entropy of the belief. If it dropped by more than a threshold — meaning the
+observation was genuinely informative, not just noise — we replan. If the belief
+didn't change much, we keep executing the current plan.
+
+The bar chart on the right shows the practical consequence: easy mazes average
+about five and a half replans per trial, medium around eight, and hard around
+thirteen and a half. That scaling makes sense — on a hard maze, the goal is
+harder to localize because the agent spends more time far away before finding a
+path through the narrow passages.
+
+
+SLIDE 10 — Empirical evaluation: 180 trials  (~40 sec)
+--------------------------------------------------------------------------------
+
+Now let's look at what the numbers say. We ran 180 trials total — thirty per
+agent per difficulty level — tracking success rate, computation time, path
+length, and replan count.
+
+The headline is on the bottom of the slide and it's worth reading directly:
+MCMC gets sixty-three percent on hard mazes, baseline RRT gets ninety-three.
+Across all difficulty levels, MCMC is eight to twenty-two times slower.
+
+That's an honest result and we're not going to oversell it. On easy and medium
+mazes the success rates are comparable, and on those difficulties the MCMC agent
+does find shorter paths — statistically significant via Mann-Whitney with effect
+sizes in the Cohen's d range of zero point four to zero point six. The path
+length figure on the next slide shows this clearly.
+
+The failure mode on hard mazes is compute, not planning quality. The agent is
+replanning thirteen times on average, each time paying the full RRT cost, and
+the cumulative collision-checking load overwhelms any path-quality advantage.
+
+
+SLIDE 11 — What we learned  (~40 sec)
+--------------------------------------------------------------------------------
+
+So what's the honest takeaway?
+
+On the left you can see what worked. The belief integration is solid — covariance
+converges in every single trial, no exceptions. Lambda biasing provably helps:
+we ran ablations with pure MCMC and the local-minimum failure rate went up
+significantly. The information gain term does guide the tree toward sensing
+useful positions. And on the mazes where the system succeeds, the paths are
+genuinely shorter — the goal-belief signal is real.
+
+The failures are on the right, and they're mostly about hyperparameters that
+weren't tuned per difficulty. The entropy threshold that triggers replanning is
+the biggest one: on hard mazes, thirteen-plus replans at fifteen thousand
+iterations each is simply too much. A coarser trigger, or an adaptive one that
+loosens as the maze gets harder, would help substantially. Similarly, lambda
+of zero point three and temperature ten were fixed across all experiments —
+hard mazes likely want a colder chain and more uniform exploration early on.
+
+The path length figure on the right gives the clearest view of where the signal
+is. On easy and medium, the MCMC bars are shorter. On hard, they disappear
+because the success rate drops.
+
+
+SLIDE 12 — What's reusable  (~35 sec)
+--------------------------------------------------------------------------------
+
+The aggregate result is mixed, but I want to close by making clear what's
+actually portable out of this work regardless of whether goal-belief sampling
+wins on this particular benchmark.
+
+The MCMC sampler is a self-contained module — Metropolis-Hastings with a lambda
+mix and a swappable cost function. Drop it into any RRT-style planner and it
+will bias sampling toward wherever your cost function says is interesting.
+
+The goal-belief module is also fully decoupled. It's a Kalman filter with
+distance-dependent noise, and it outputs a Gaussian. Any planner that needs to
+localize a target while executing can plug it in directly.
+
+The evaluation harness ran all 180 trials with statistical tests baked in —
+Mann-Whitney, chi-square, Cohen's d — and logged full telemetry per trial. That
+infrastructure is reusable for any future comparison on this benchmark.
+
+And finally — the rejected samples from this planner, the configurations the
+MCMC chain visited but that turned out to be in collision, encode the obstacle
+geometry of the maze. It turns out those samples are useful training data on
+their own, and that's the basis of a separate project on learning C-space
+topology from MCMC traces. Thanks.

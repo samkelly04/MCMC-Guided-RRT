@@ -1,0 +1,88 @@
+SPEAKER NOTES — MCMC-Guided RRT Presentation
+Slides 5–7 Script
+================================================================================
+
+
+SLIDE 5 — The system, end-to-end  (~40 sec)
+--------------------------------------------------------------------------------
+
+So now that we know what environment we're operating in, let's look at how the
+full system fits together before we go into any individual component.
+
+The planner runs as a continuous loop across five stages. The robot takes a
+noisy distance observation to the goal — that's the sense step. That observation
+feeds a Kalman filter update, which refines the Gaussian belief over goal
+location. The updated belief then feeds the sampler, which is where the core
+contribution lives — we'll get to that next. The sampler produces candidate
+configurations, the RRT extends the tree toward them, and the robot executes a
+partial path before the loop repeats.
+
+A few implementation details worth flagging: collision checking is done via
+Shapely polygon intersection at about 0.33 milliseconds per query,
+nearest-neighbor search uses a scipy KD-tree at O(log n), and each planning
+episode runs up to fifteen thousand RRT iterations. The MCMC chain runs
+Metropolis-Hastings targeting a Boltzmann distribution at temperature ten —
+that distribution is defined by the cost function we'll see on slide seven.
+
+The loop doesn't replan on every step. It replans only when the entropy of the
+belief distribution drops past a threshold — meaning the robot learned something
+meaningful about where the goal is. That's the trigger condition shown at the
+bottom.
+
+
+SLIDE 6 — The sampler: lambda biasing  (~45 sec)
+--------------------------------------------------------------------------------
+
+The sampler is the central engineering contribution, so let's be precise about
+what it does.
+
+At each iteration we need a candidate configuration to grow the RRT toward. The
+formula at the top is how we get it: with probability one-minus-lambda we draw
+from an MCMC chain, and with probability lambda we draw uniformly at random from
+free space. In our experiments lambda is fixed at 0.30.
+
+The reason you need the mix comes down to probabilistic completeness. Pure MCMC
+concentrates its mass around the current belief mean — wherever we think the
+goal is. If that estimate is wrong early in the mission, the chain gets stuck,
+the tree stops exploring, and the planner can fail even when a valid path exists.
+The thirty percent uniform component is what prevents that. It guarantees the
+tree will eventually reach any reachable configuration regardless of where the
+belief is pointing.
+
+On the MCMC side: the chain runs Metropolis-Hastings with a Gaussian proposal at
+standard deviation five, and the target distribution is Boltzmann — pi of q
+proportional to exp of negative J of q over T, with temperature ten. The chain
+state is preserved between planning rounds so it doesn't restart cold. The
+practical payoff is that once the belief converges and the chain is mixing well
+near the true goal region, you can tune lambda down and get more focused sampling
+— it's a knob that tracks uncertainty.
+
+
+SLIDE 7 — Information-aware cost function  (~45 sec)
+--------------------------------------------------------------------------------
+
+That Boltzmann distribution the MCMC chain targets is defined by this cost
+function — so let's unpack it.
+
+J of q has three terms. The first is just Euclidean distance to the belief mean
+mu. This is convex with a global minimum at mu, which is exactly what you want
+for MCMC — no gradient reversals, no saddle points, the chain mixes cleanly.
+Weight lambda-g is one.
+
+The second term is a clearance penalty: lambda-c over d-obs of q plus epsilon,
+where d-obs is the minimum distance to any obstacle boundary. This creates a
+repulsive potential that grows as the robot approaches walls. Anything in
+collision or out of bounds gets assigned infinite cost — a hard constraint.
+Weight lambda-c is zero point five.
+
+The third term is where the active perception idea lives. For any candidate
+configuration q, we simulate what would happen if the robot took a sensor reading
+from there — we run a hypothetical Kalman update and compute how much the total
+variance of the belief would shrink. That expected reduction in det-Sigma is the
+information gain. We subtract it from the cost, so high-information positions are
+cheaper to visit. Weight lambda-i is two.
+
+The net effect is that the sampler naturally trades off three things at once: get
+closer to the likely goal, stay away from walls, and prefer positions where
+looking would actually tell you something. As the belief converges and Sigma
+shrinks, the third term vanishes on its own — no manual schedule needed.

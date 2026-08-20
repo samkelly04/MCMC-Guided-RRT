@@ -1,0 +1,87 @@
+================================================================================
+STATISTICAL ANALYSIS REPORT
+================================================================================
+
+--------------------------------------------------------------------------------
+SUCCESS RATE COMPARISON
+--------------------------------------------------------------------------------
+
+EASY Complexity:
+  AdaptiveMCMCAgent vs RRTAgent:
+    AdaptiveMCMCAgent: 30/30 (100.0%)
+    RRTAgent: 30/30 (100.0%)
+    Chi-square: Insufficient data (0% or 100% success rate)
+
+
+MEDIUM Complexity:
+  AdaptiveMCMCAgent vs RRTAgent:
+    AdaptiveMCMCAgent: 15/30 (50.0%)
+    RRTAgent: 17/30 (56.7%)
+    Chi-square: χ²=0.0670, p=0.7958 
+
+
+HARD Complexity:
+  AdaptiveMCMCAgent vs RRTAgent:
+    AdaptiveMCMCAgent: 19/30 (63.3%)
+    RRTAgent: 28/30 (93.3%)
+    Chi-square: χ²=6.2848, p=0.0122 *
+
+--------------------------------------------------------------------------------
+COMPUTATION TIME COMPARISON
+--------------------------------------------------------------------------------
+
+AdaptiveMCMCAgent vs RRTAgent:
+
+  EASY:
+    AdaptiveMCMCAgent: mean=16.7668s, std=24.0888s
+    RRTAgent: mean=1.5857s, std=2.2905s
+    Mann-Whitney U: U=788.00, p=0.0000 *
+    Independent t-test: t=3.3786, p=0.0013 *
+    Cohen's d: 0.8723 (Large)
+
+  MEDIUM:
+    AdaptiveMCMCAgent: mean=140.4905s, std=193.6559s
+    RRTAgent: mean=20.7635s, std=36.7221s
+    Mann-Whitney U: U=787.00, p=0.0000 *
+    Independent t-test: t=3.2711, p=0.0018 *
+    Cohen's d: 0.8446 (Large)
+
+  HARD:
+    AdaptiveMCMCAgent: mean=425.4487s, std=457.9691s
+    RRTAgent: mean=19.6567s, std=20.2982s
+    Mann-Whitney U: U=831.00, p=0.0000 *
+    Independent t-test: t=4.7669, p=0.0000 *
+    Cohen's d: 1.2308 (Large)
+
+--------------------------------------------------------------------------------
+PATH LENGTH COMPARISON (Successful Trials Only)
+--------------------------------------------------------------------------------
+
+AdaptiveMCMCAgent vs RRTAgent:
+
+  EASY:
+    AdaptiveMCMCAgent: mean=193.07, std=69.32
+    RRTAgent: mean=230.87, std=66.95
+    Mann-Whitney U: U=250.00, p=0.0032 *
+    Independent t-test: t=-2.1118, p=0.0390 *
+    Cohen's d: -0.5453 (Medium)
+
+  MEDIUM:
+    AdaptiveMCMCAgent: mean=183.96, std=88.35
+    RRTAgent: mean=241.05, std=79.54
+    Mann-Whitney U: U=43.00, p=0.0015 *
+    Independent t-test: t=-1.8624, p=0.0724 
+    Cohen's d: -0.6598 (Medium)
+
+  HARD:
+    AdaptiveMCMCAgent: mean=277.63, std=105.98
+    RRTAgent: mean=300.50, std=84.69
+    Mann-Whitney U: U=203.00, p=0.1755 
+    Independent t-test: t=-0.8021, p=0.4267 
+    Cohen's d: -0.2384 (Small)
+
+================================================================================
+LEGEND:
+  * = Statistically significant (p < 0.05)
+  Cohen's d interpretation: <0.2=Negligible, 0.2-0.5=Small, 0.5-0.8=Medium, >0.8=Large
+================================================================================
